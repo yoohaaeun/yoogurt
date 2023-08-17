@@ -68,6 +68,9 @@ a {
   text-decoration:none;
   color:inherit;
 }
+input {
+  outline: none;
+}
 `;
 
 export default GlobalStyle;

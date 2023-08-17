@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 
 const Nav = styled.nav`
   display: flex;
@@ -66,22 +66,36 @@ const Search = styled.span`
   font-size: 20px;
   position: absolute;
   cursor: pointer;
+
+  svg {
+    z-index: 1;
+  }
 `;
 
 const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
-  left: -152px;
-  border: 1px solid white;
+  right: 1rem;
+  padding: 0.5rem 0.3rem;
+  padding-left: 3rem;
+  border: 1px solid ${(props) => props.theme.white.lighter};
   background-color: transparent;
-  padding: 5px;
+  color: white;
 `;
 
 export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch('/');
   const tvMatch = useMatch('tv');
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const inputAnimation = useAnimation();
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({ scaleX: 0 });
+    } else {
+      inputAnimation.start({ scaleX: 1 });
+    }
+    setSearchOpen((prev) => !prev);
+  };
 
   return (
     <Nav>
@@ -114,8 +128,9 @@ export default function Navbar() {
             <path d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z' />
           </motion.svg>
           <Input
+            animate={inputAnimation}
+            initial={{ scaleX: 0 }}
             transition={{ type: 'linear' }}
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
             placeholder='제목, 사람, 장르'
           />
         </Search>
