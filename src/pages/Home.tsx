@@ -8,5 +8,5 @@ const Div = styled.div`
 `;
 
 export default function Home() {
-  return <Div>Home</Div>;
+  return <Div>홈</Div>;
 }

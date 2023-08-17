@@ -8,5 +8,5 @@ const Div = styled.div`
 `;
 
 export default function Tv() {
-  return <Div></Div>;
+  return <Div>시리즈</Div>;
 }

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const Nav = styled.nav`
   display: flex;
@@ -36,46 +38,57 @@ const Items = styled.ul`
 const Item = styled.li`
   margin-right: 20px;
   color: ${(props) => props.theme.white.darker};
+  position: relative;
   transition: color 0.3s ease-in-out;
+  display: felx;
+  flex-direction: column;
+  justify-content: center;
+
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
 `;
 
+const Circle = styled(motion.span)`
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: ${(props) => props.theme.red};
+`;
+
 const Search = styled.span`
-  color: white;
-  svg {
-    height: 25px;
-  }
+  font-size: 20px;
 `;
 
 export default function Navbar() {
+  const homeMatch = useMatch('/');
+  const tvMatch = useMatch('tv');
+
   return (
     <Nav>
       <Col>
         <Logo>Yooflix</Logo>
         <Items>
           <Item>
-            <Link to='/'>Home</Link>
+            <Link to='/'>홈 {homeMatch && <Circle layoutId='circle' />}</Link>
           </Item>
           <Item>
-            <Link to='/tv'>Tv</Link>
+            <Link to='/tv'>
+              시리즈 {tvMatch && <Circle layoutId='circle' />}
+            </Link>
           </Item>
+          <Item>영화</Item>
+          <Item>New! 요즘 대세 콘텐츠</Item>
         </Items>
       </Col>
       <Col>
         <Search>
-          <svg
-            fill='currentColor'
-            viewBox='0 0 20 20'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              fillRule='evenodd'
-              d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
-              clipRule='evenodd'
-            ></path>
-          </svg>
+          <AiOutlineSearch />
         </Search>
       </Col>
     </Nav>
