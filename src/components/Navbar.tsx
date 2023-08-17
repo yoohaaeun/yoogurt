@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion, useAnimation } from 'framer-motion';
+import {
+  motion,
+  useAnimation,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion';
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  position: fixed;
+  top: 0;
   background-color: black;
   font-size: 14px;
   padding: 20px 60px;
@@ -88,6 +95,8 @@ export default function Navbar() {
   const homeMatch = useMatch('/');
   const tvMatch = useMatch('tv');
   const inputAnimation = useAnimation();
+  const navAnimation = useAnimation();
+  const { scrollY } = useScroll();
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({ scaleX: 0 });
@@ -97,8 +106,20 @@ export default function Navbar() {
     setSearchOpen((prev) => !prev);
   };
 
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    if (y > 10) {
+      navAnimation.start({
+        backgroundColor: 'rgba(0,0,0,1)',
+      });
+    } else {
+      navAnimation.start({
+        backgroundColor: 'rgba(0,0,0,0)',
+      });
+    }
+  });
+
   return (
-    <Nav>
+    <Nav animate={navAnimation} initial={{ backgroundColor: 'rgba(0,0,0,0)' }}>
       <Col>
         <Logo>Yooflix</Logo>
         <Items>
