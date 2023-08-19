@@ -17,7 +17,7 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
+const Banner = styled.div<{ $bgPhoto: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,7 +25,7 @@ const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
   padding: 60px;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
+    url(${(props) => props.$bgPhoto});
   background-size: cover;
 `;
 
@@ -47,15 +47,17 @@ const Slider = styled.div`
 const Row = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+  gap: 5px;
   position: absolute;
   width: 100%;
 `;
 
-const Box = styled(motion.div)`
+const Box = styled(motion.div)<{ $bgPhoto: string }>`
+  background-image: url(${(props) => props.$bgPhoto});
+  background-size: cover;
+  background-position: center center;
   background-color: whitesmoke;
   height: 200px;
-  color: red;
   font-size: 66px;
 `;
 
@@ -71,6 +73,8 @@ const rowVariants = {
   },
 };
 
+const offset = 6;
+
 export default function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ['movies', 'nowPlaying'],
@@ -80,9 +84,13 @@ export default function Home() {
   const [leaving, setLeaving] = useState(false);
 
   const incraseIndex = () => {
-    if (leaving) return;
-    setLeaving(true);
-    setIndex((prev) => prev + 1);
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMovies = data.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
   };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
@@ -95,7 +103,7 @@ export default function Home() {
         <>
           <Banner
             onClick={incraseIndex}
-            bgPhoto={makeImagePath(data?.results[0].backdrop_path || '')}
+            $bgPhoto={makeImagePath(data?.results[0].backdrop_path || '')}
           >
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
@@ -110,9 +118,15 @@ export default function Home() {
                 transition={{ type: 'tween', duration: 1 }}
                 key={index}
               >
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <Box key={i}>{i}</Box>
-                ))}
+                {data?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <Box
+                      key={movie.id}
+                      $bgPhoto={makeImagePath(movie.backdrop_path)}
+                    />
+                  ))}
               </Row>
             </AnimatePresence>
           </Slider>
