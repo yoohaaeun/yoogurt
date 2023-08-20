@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -87,6 +87,24 @@ const Info = styled(motion.div)`
   }
 `;
 
+const Overlay = styled(motion.div)`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+`;
+
+const BigMovie = styled(motion.div)`
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+`;
+
 const rowVariants = {
   hidden: {
     x: window.outerWidth + 10,
@@ -130,14 +148,13 @@ const offset = 6;
 export default function Home() {
   const navigate = useNavigate();
   const { movieId } = useParams();
-
+  const { scrollY } = useScroll();
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ['movies', 'nowPlaying'],
     getMovies
   );
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
-
   const incraseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -147,11 +164,16 @@ export default function Home() {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
-
   const toggleLeaving = () => setLeaving((prev) => !prev);
-
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
+  };
+  const onOverlayCLick = () => navigate('/');
+  const getModalTop = () => {
+    const screenHeight = window.innerHeight;
+    const modalHeight = screenHeight * 0.8;
+    const topPosition = (screenHeight - modalHeight) / 2 + scrollY.get();
+    return topPosition;
   };
 
   return (
@@ -201,20 +223,27 @@ export default function Home() {
           </Slider>
           <AnimatePresence>
             {movieId ? (
-              <motion.div
-                layoutId={movieId}
-                style={{
-                  position: 'absolute',
-                  width: '40vw',
-                  height: '80vh',
-                  backgroundColor: '#E3E1DB',
-                  top: 50,
-                  left: 0,
-                  right: 0,
-                  margin: '0 auto',
-                  borderRadius: '10px',
-                }}
-              />
+              <>
+                <Overlay
+                  onClick={onOverlayCLick}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <motion.div
+                  layoutId={movieId}
+                  style={{
+                    position: 'absolute',
+                    width: '40vw',
+                    height: '80vh',
+                    backgroundColor: '#E3E1DB',
+                    top: getModalTop(),
+                    left: 0,
+                    right: 0,
+                    margin: '0 auto',
+                    borderRadius: '10px',
+                  }}
+                />
+              </>
             ) : null}
           </AnimatePresence>
         </>
@@ -222,3 +251,7 @@ export default function Home() {
     </Wrapper>
   );
 }
+
+/*
+
+*/
