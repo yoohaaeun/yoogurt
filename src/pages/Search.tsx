@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Div = styled.div`
@@ -8,5 +9,9 @@ const Div = styled.div`
 `;
 
 export default function Search() {
-  return <Div>Search</Div>;
+  const {
+    state: { keyword },
+  } = useLocation();
+
+  return <Div></Div>;
 }

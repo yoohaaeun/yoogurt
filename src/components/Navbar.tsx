@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { Link, useMatch, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   motion,
@@ -7,6 +7,7 @@ import {
   useMotionValueEvent,
   useScroll,
 } from 'framer-motion';
+import { useForm } from 'react-hook-form';
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -67,7 +68,7 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   display: flex;
   align-items: center;
   font-size: 20px;
@@ -90,10 +91,15 @@ const Input = styled(motion.input)`
   color: white;
 `;
 
+interface IForm {
+  keyword: string;
+}
+
 export default function Navbar() {
+  const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch('/');
-  const tvMatch = useMatch('tv');
+  const tvMatch = useMatch('/tv');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -118,6 +124,13 @@ export default function Navbar() {
     }
   });
 
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    navigate(`/search?keyword=${data.keyword}`, {
+      state: { keyword: data.keyword },
+    });
+  };
+
   return (
     <Nav animate={navAnimation} initial={{ backgroundColor: 'rgba(0,0,0,0)' }}>
       <Col>
@@ -136,7 +149,7 @@ export default function Navbar() {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
@@ -149,6 +162,7 @@ export default function Navbar() {
             <path d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z' />
           </motion.svg>
           <Input
+            {...register('keyword', { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: 'linear' }}
