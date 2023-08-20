@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
@@ -60,6 +61,8 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   height: 200px;
   font-size: 66px;
   border-radius: 5px;
+  cursor: pointer;
+
   &:first-child {
     transform-origin: center left;
   }
@@ -125,6 +128,9 @@ const infoVariants = {
 const offset = 6;
 
 export default function Home() {
+  const navigate = useNavigate();
+  const { movieId } = useParams();
+
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ['movies', 'nowPlaying'],
     getMovies
@@ -143,6 +149,10 @@ export default function Home() {
   };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
+
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
+  };
 
   return (
     <Wrapper>
@@ -172,10 +182,12 @@ export default function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      layoutId={movie.id + ''}
                       key={movie.id}
                       variants={boxVariants}
                       initial='normal'
                       whileHover='hover'
+                      onClick={() => onBoxClicked(movie.id)}
                       transition={{ type: 'tween' }}
                       $bgPhoto={makeImagePath(movie.backdrop_path)}
                     >
@@ -187,6 +199,24 @@ export default function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {movieId ? (
+              <motion.div
+                layoutId={movieId}
+                style={{
+                  position: 'absolute',
+                  width: '40vw',
+                  height: '80vh',
+                  backgroundColor: '#E3E1DB',
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  margin: '0 auto',
+                  borderRadius: '10px',
+                }}
+              />
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
