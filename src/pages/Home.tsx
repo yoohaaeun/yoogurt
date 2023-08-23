@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence, motion, useScroll } from 'framer-motion';
-import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { getMovies, IGetMoviesResult } from '../api';
+import { getNowPlayingMovies, IContentResult } from '../api';
+import MovieDetail from '../components/MovieDetail';
 import { makeImagePath } from '../utils';
 
 const Wrapper = styled.div`
@@ -88,50 +89,6 @@ const Info = styled(motion.div)`
   }
 `;
 
-const Overlay = styled(motion.div)`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  opacity: 0;
-`;
-
-const BigMovie = styled(motion.div)`
-  position: fixed;
-  width: 40vw;
-  height: 80vh;
-  top: 50px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
-`;
-
-const BigCover = styled.div`
-  width: 100%;
-  background-size: cover;
-  background-position: center center;
-  height: 400px;
-  border-radius: 10px 10px 0 0;
-`;
-
-const BigTitle = styled.h3`
-  color: ${(props) => props.theme.white.lighter};
-  padding: 20px;
-  font-size: 46px;
-  position: relative;
-  top: -80px;
-`;
-
-const BigOverview = styled.p`
-  padding: 20px;
-  position: relative;
-  top: -80px;
-  color: ${(props) => props.theme.white.lighter};
-`;
-
 const rowVariants = {
   hidden: {
     x: window.outerWidth + 10,
@@ -174,10 +131,10 @@ const offset = 6;
 
 export default function Home() {
   const navigate = useNavigate();
-  const { movieId } = useParams();
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
+
+  const { data, isLoading } = useQuery<IContentResult>(
     ['movies', 'nowPlaying'],
-    getMovies
+    getNowPlayingMovies
   );
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -194,9 +151,9 @@ export default function Home() {
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
   };
-  const onOverlayCLick = () => navigate('/');
+  const { movieId } = useParams();
   const clickedMovie =
-    movieId && data?.results.find((movie) => movie.id === +movieId);
+    movieId && data?.results.find((movie: any) => movie.id === +movieId);
 
   return (
     <Wrapper>
@@ -243,33 +200,7 @@ export default function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
-          <AnimatePresence>
-            {movieId ? (
-              <>
-                <Overlay
-                  onClick={onOverlayCLick}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                <BigMovie layoutId={movieId}>
-                  {clickedMovie && (
-                    <>
-                      <BigCover
-                        style={{
-                          backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                            clickedMovie.backdrop_path,
-                            'w500'
-                          )})`,
-                        }}
-                      />
-                      <BigTitle>{clickedMovie.title}</BigTitle>
-                      <BigOverview>{clickedMovie.overview}</BigOverview>
-                    </>
-                  )}
-                </BigMovie>
-              </>
-            ) : null}
-          </AnimatePresence>
+          <MovieDetail clickedMovie={clickedMovie} />
         </>
       )}
     </Wrapper>
