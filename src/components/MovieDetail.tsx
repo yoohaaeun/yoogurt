@@ -49,8 +49,6 @@ const Overview = styled.p`
 `;
 
 export default function MovieDetail({ clickedMovie }: any) {
-  console.log(clickedMovie);
-
   const navigate = useNavigate();
   const { movieId } = useParams();
   const onOverlayCLick = () => navigate('/');

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getNowPlayingMovies, IContentResult } from '../api';
+import ContentBox from '../components/ContentBox';
 import MovieDetail from '../components/MovieDetail';
 import { makeImagePath } from '../utils';
 
@@ -46,6 +47,7 @@ const Overview = styled.p`
 const Slider = styled.div`
   position: relative;
   top: -100px;
+  margin-bottom: 200px;
 `;
 
 const Row = styled(motion.div)`
@@ -54,39 +56,6 @@ const Row = styled(motion.div)`
   gap: 5px;
   position: absolute;
   width: 100%;
-`;
-
-const Box = styled(motion.div)<{ $bgPhoto: string }>`
-  background-image: url(${(props) => props.$bgPhoto});
-  background-size: cover;
-  background-position: center center;
-  height: 200px;
-  font-size: 66px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:first-child {
-    transform-origin: center left;
-  }
-
-  &:last-child {
-    transform-origin: center right;
-  }
-`;
-
-const Info = styled(motion.div)`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
-  opacity: 0;
-  border-radius: 0 0 5px 5px;
-
-  h4 {
-    text-align: center;
-    font-size: 18px;
-  }
 `;
 
 const rowVariants = {
@@ -98,32 +67,6 @@ const rowVariants = {
   },
   exit: {
     x: -window.outerWidth - 10,
-  },
-};
-
-const boxVariants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.3,
-    y: -50,
-    transition: {
-      delay: 0.5,
-      duration: 0.3,
-      type: 'tween',
-    },
-  },
-};
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 0.1,
-      type: 'tween',
-    },
   },
 };
 
@@ -182,20 +125,7 @@ export default function Home() {
                   .slice(1)
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
-                    <Box
-                      layoutId={movie.id + ''}
-                      key={movie.id}
-                      variants={boxVariants}
-                      initial='normal'
-                      whileHover='hover'
-                      onClick={() => onBoxClicked(movie.id)}
-                      transition={{ type: 'tween' }}
-                      $bgPhoto={makeImagePath(movie.backdrop_path)}
-                    >
-                      <Info variants={infoVariants}>
-                        <h4>{movie.title}</h4>
-                      </Info>
-                    </Box>
+                    <ContentBox movie={movie} onClick={onBoxClicked} />
                   ))}
               </Row>
             </AnimatePresence>
