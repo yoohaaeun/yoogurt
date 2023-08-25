@@ -16,7 +16,6 @@ const Nav = styled(motion.nav)`
   width: 100%;
   position: fixed;
   top: 0;
-  background-color: black;
   font-size: 14px;
   padding: 20px 60px;
   color: white;
@@ -114,7 +113,7 @@ export default function Navbar() {
   };
 
   useMotionValueEvent(scrollY, 'change', (y) => {
-    if (y > 10) {
+    if (y > 170) {
       navAnimation.start({
         backgroundColor: 'rgba(0,0,0,1)',
       });
