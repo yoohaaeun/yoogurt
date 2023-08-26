@@ -79,7 +79,7 @@ export default function Home() {
         animate={bgAnimation}
         initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
       >
-        {popularMovies && <Banner data={popularMovies} />}
+        {nowPlayingMovies && <Banner data={nowPlayingMovies} />}
 
         {popularMovies && (
           <Slider data={popularMovies} title={'보고 또 봐도 좋은 인기 영화'} />

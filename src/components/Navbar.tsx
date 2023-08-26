@@ -87,8 +87,8 @@ const Input = styled(motion.input)`
   padding: 0.5rem 0.3rem;
   padding-left: 3rem;
   border: 1px solid ${(props) => props.theme.white.lighter};
-  background-color: transparent;
-  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: ${(props) => props.theme.white.lighter};
 `;
 
 interface IForm {
