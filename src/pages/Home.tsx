@@ -32,7 +32,7 @@ const Container = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: relative;
-  padding: 0 60px 60px 60px;
+  padding: 0 150px 60px 150px;
 `;
 
 export default function Home() {
@@ -60,7 +60,7 @@ export default function Home() {
   );
 
   useMotionValueEvent(scrollY, 'change', (y) => {
-    if (y > 170) {
+    if (y > 150) {
       bgAnimation.start({
         backgroundColor: 'rgba(0,0,0,0.8)',
       });
@@ -79,11 +79,20 @@ export default function Home() {
         animate={bgAnimation}
         initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
       >
-        <Banner data={popularMovies} />
-        <Slider data={popularMovies} title={'보고 또 봐도 좋은 인기 영화'} />
-        <Slider data={nowPlayingMovies} title={'현재 상영 중인 영화'} />
-        <Slider data={topRatedMovies} title={'평점이 높은 영화'} />
-        <Slider data={upcomingMovies} title={'두근두근 Coming Soon'} />
+        {popularMovies && <Banner data={popularMovies} />}
+
+        {popularMovies && (
+          <Slider data={popularMovies} title={'보고 또 봐도 좋은 인기 영화'} />
+        )}
+        {nowPlayingMovies && (
+          <Slider data={nowPlayingMovies} title={'현재 상영 중인 영화'} />
+        )}
+        {topRatedMovies && (
+          <Slider data={topRatedMovies} title={'평점이 높은 영화'} />
+        )}
+        {upcomingMovies && (
+          <Slider data={upcomingMovies} title={'두근두근 Coming Soon'} />
+        )}
       </Container>
     </Wrapper>
   );

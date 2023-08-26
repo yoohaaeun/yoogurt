@@ -3,17 +3,18 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import ContentDetail from './ContentDetail';
 import { makeImagePath } from '../utils';
+import SlideBtn from './SlideBtn';
+import { IContentResult } from '../api';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 280px;
-  margin-bottom: 10px;
-  top: -120px;
+  margin-bottom: 130px;
 `;
 
 const Title = styled.div`
+  font-size: 25px;
   margin-bottom: 20px;
-  font-size: 20px;
 `;
 
 const Container = styled.div`
@@ -36,8 +37,9 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   background-position: center center;
   height: 100px;
   width: 19%;
-  height: 200px;
-  border-radius: 10px;
+  height: 250px;
+  border-radius: 15px;
+  cursor: pointer;
 
   &:first-child {
     transform-origin: center left;
@@ -62,14 +64,8 @@ const Info = styled(motion.div)`
   }
 `;
 
-const Buttons = styled.div`
-  z-index: 9999;
-  justify-content: space-between;
-  display: flex;
-`;
-
 interface ISlider {
-  data: any;
+  data: IContentResult;
   title: string;
 }
 
@@ -160,7 +156,7 @@ export default function TestSlider({ data, title }: ISlider) {
           >
             {data?.results
               .slice(offset * index, offset * index + offset)
-              .map((movie: any) => (
+              .map((movie) => (
                 <Box
                   key={movie.id}
                   variants={boxVariants}
@@ -169,7 +165,6 @@ export default function TestSlider({ data, title }: ISlider) {
                   transition={{ type: 'tween' }}
                   $bgPhoto={makeImagePath(movie.backdrop_path)}
                 >
-                  {' '}
                   <Info variants={infoVariants}>
                     <h4>{movie.title}</h4>
                   </Info>
@@ -177,12 +172,8 @@ export default function TestSlider({ data, title }: ISlider) {
               ))}
           </Row>
         </AnimatePresence>
-        <Buttons>
-          <button onClick={prevPage}>이전</button>
-          <button onClick={nextPage}>다음</button>
-        </Buttons>
+        <SlideBtn prevBtn={prevPage} nextBtn={nextPage} />
       </Container>
-      <ContentDetail />
     </Wrapper>
   );
 }
