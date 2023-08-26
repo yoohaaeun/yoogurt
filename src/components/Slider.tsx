@@ -64,6 +64,8 @@ const Info = styled(motion.div)`
 
 const Buttons = styled.div`
   z-index: 9999;
+  justify-content: space-between;
+  display: flex;
 `;
 
 interface ISlider {
@@ -72,15 +74,15 @@ interface ISlider {
 }
 
 const rowVariants = {
-  hidden: {
-    x: window.outerWidth + 10,
-  },
+  hidden: (isBack: boolean) => ({
+    x: isBack ? -window.outerWidth - 10 : window.outerWidth + 10,
+  }),
   visible: {
     x: 0,
   },
-  exit: {
-    x: -window.outerWidth - 10,
-  },
+  exit: (isBack: boolean) => ({
+    x: isBack ? window.outerWidth + 10 : -window.outerWidth - 10,
+  }),
 };
 
 const boxVariants = {
@@ -114,13 +116,25 @@ const offset = 5;
 export default function TestSlider({ data, title }: ISlider) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  const [isBack, setIsback] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
-  const increaseIndex = () => {
-    if (data) {
-      if (leaving) return;
+  const prevPage = () => {
+    if (data && !leaving) {
+      setIsback(true);
       toggleLeaving();
-      const totalMovies = data.results.length - 1;
+      const totalMovies = data.results.length;
+      const minIndex = 0;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === minIndex ? maxIndex : prev - 1));
+    }
+  };
+
+  const nextPage = () => {
+    if (data && !leaving) {
+      setIsback(false);
+      toggleLeaving();
+      const totalMovies = data.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
@@ -130,8 +144,13 @@ export default function TestSlider({ data, title }: ISlider) {
     <Wrapper>
       <Title>{title}</Title>
       <Container>
-        <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+        <AnimatePresence
+          custom={isBack}
+          initial={false}
+          onExitComplete={toggleLeaving}
+        >
           <Row
+            custom={isBack}
             variants={rowVariants}
             initial='hidden'
             animate='visible'
@@ -140,7 +159,6 @@ export default function TestSlider({ data, title }: ISlider) {
             key={index}
           >
             {data?.results
-              .slice(1)
               .slice(offset * index, offset * index + offset)
               .map((movie: any) => (
                 <Box
@@ -160,7 +178,8 @@ export default function TestSlider({ data, title }: ISlider) {
           </Row>
         </AnimatePresence>
         <Buttons>
-          <button onClick={increaseIndex}>다음</button>
+          <button onClick={prevPage}>이전</button>
+          <button onClick={nextPage}>다음</button>
         </Buttons>
       </Container>
       <ContentDetail />
