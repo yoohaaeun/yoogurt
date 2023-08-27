@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
+import { useMovieDetails } from '../api';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -25,6 +26,7 @@ const Container = styled(motion.div)`
   border-radius: 10px;
   background-color: ${(props) => props.theme.black.lighter};
   z-index: 100;
+  overflow: auto;
 `;
 
 const Cover = styled.div`
@@ -50,13 +52,15 @@ const Overview = styled.p`
   color: ${(props) => props.theme.white.lighter};
 `;
 
-export default function ContentDetail({ clickedMovie }: any) {
+export default function ContentDetail() {
   const navigate = useNavigate();
   const onOverlayCLick = () => navigate('/');
+  const { movieId } = useParams();
+  const { data } = useMovieDetails(Number(movieId));
 
   return (
     <>
-      {clickedMovie && (
+      {data && (
         <>
           <Overlay
             onClick={onOverlayCLick}
@@ -68,13 +72,56 @@ export default function ContentDetail({ clickedMovie }: any) {
               <Cover
                 style={{
                   backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                    clickedMovie.backdrop_path,
+                    data.backdrop_path,
                     'w500'
                   )})`,
                 }}
               />
-              <Title>{clickedMovie.title}</Title>
-              <Overview>{clickedMovie.overview}</Overview>
+              <Title>{data.title}</Title>
+              <Overview>{data.overview}</Overview>
+              <p>장르 : {data.genres[0].name}</p>
+              <p>id : {data.id}</p>
+              <p>original_title : {data.original_title}</p>
+              <p>영화의 인기도 : {data.popularity}</p>
+              <p>개봉일 : {data.release_date}</p>
+              <p>러닝타임 : {data.runtime}</p>
+              <p>개봉여부 : {data.status}</p>
+              <p>슬로건 : {data.tagline}</p>
+              <p>평점: {data.vote_average}</p>
+              <p>투표자 수 : {data.vote_count}</p>
+              {data?.poster_path && (
+                <img
+                  src={makeImagePath(data.poster_path || '')}
+                  style={{ width: '200px' }}
+                  alt=''
+                />
+              )}
+              {data?.backdrop_path && (
+                <img
+                  src={makeImagePath(data.backdrop_path || '')}
+                  style={{ width: '200px' }}
+                  alt=''
+                />
+              )}
+              {data?.production_companies && (
+                <img
+                  src={makeImagePath(
+                    data.production_companies[0].logo_path || ''
+                  )}
+                  style={{ width: '200px' }}
+                  alt=''
+                />
+              )}
+
+              {data?.production_companies && (
+                <img
+                  src={makeImagePath(
+                    data.production_companies[1].logo_path || ''
+                  )}
+                  style={{ width: '200px' }}
+                  alt=''
+                />
+              )}
             </>
           </Container>
         </>

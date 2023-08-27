@@ -1,6 +1,9 @@
 import styled from 'styled-components';
-import { IContentResult } from '../api';
+import { IContent } from '../api';
 import { LuInfo } from 'react-icons/lu';
+import ContentDetail from './ContentDetail';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,18 +52,30 @@ const InfoIcon = styled(LuInfo)`
 `;
 
 interface IBanner {
-  data: IContentResult;
+  data: IContent;
 }
 
 export default function Banner({ data }: IBanner) {
+  const navigate = useNavigate();
+  const [showContentDetail, setShowContentDetail] = useState(false);
+  const handleInfoClick = () => {
+    navigate(`/movies/${data.id}`);
+    setShowContentDetail(true);
+  };
+
   return (
-    <Wrapper>
-      <Title>{data?.results[0].title}</Title>
-      <Overview>{data?.results[0].overview}</Overview>
-      <Info>
-        <InfoIcon />
-        <span> 상세 정보</span>
-      </Info>
-    </Wrapper>
+    <>
+      {data && (
+        <Wrapper>
+          <Title>{data.title}</Title>
+          <Overview>{data.overview}</Overview>
+          <Info onClick={handleInfoClick}>
+            <InfoIcon />
+            <span>상세 정보</span>
+          </Info>
+        </Wrapper>
+      )}
+      {showContentDetail && <ContentDetail />}
+    </>
   );
 }

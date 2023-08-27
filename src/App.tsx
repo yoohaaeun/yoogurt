@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     errorElement: <div>NotFound</div>,
     children: [
       { index: true, element: <Home /> },
-      { path: '/movies/:category/:movieId', element: <Home /> },
+      { path: '/movies/:movieId', element: <Home /> },
       { path: '/tv', element: <Tv /> },
       { path: '/movies', element: <Tv /> },
       { path: '/new-and-popular', element: <Tv /> },

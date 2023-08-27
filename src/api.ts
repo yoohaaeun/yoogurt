@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-const API_KEY = '76819e38cf8b722862e7930703629b13';
+const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_PATH = 'https://api.themoviedb.org/3';
 const LANGUAGE = 'ko-KR';
 
-interface IContent {
+export interface IContent {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -39,6 +39,7 @@ export function useMoviesByCategory(category: string) {
     () => getMoviesByCategory(category),
     {
       staleTime: 1000 * 60 * 5,
+      enabled: !!category,
     }
   );
 }
@@ -58,6 +59,7 @@ export function useTVSeriesByCategory(category: string) {
     () => getTVSeriesByCategory(category),
     {
       staleTime: 1000 * 60 * 5,
+      enabled: !!category,
     }
   );
 }
@@ -93,6 +95,7 @@ export function useMediaByGenre(type: string, genreName: string) {
     () => getMediaByGenre(type, genreName),
     {
       staleTime: 1000 * 60 * 5,
+      enabled: !!type || !!genreName,
     }
   );
 }
@@ -112,6 +115,57 @@ export function useWeeklyTrendingMedia(type: string) {
     () => getWeeklyTrendingMedia(type),
     {
       staleTime: 1000 * 60 * 5,
+      enabled: !!type,
+    }
+  );
+}
+
+// Details
+
+interface IGenres {
+  id: number;
+  name: string;
+}
+
+interface IproductionCompanies {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
+}
+
+export interface IDetail {
+  backdrop_path: string;
+  genres: IGenres[];
+  id: number;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: IproductionCompanies[];
+  release_date: string;
+  runtime: number;
+  status: string;
+  tagline: string;
+  title: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+export async function getMovieDetails(movieId: number) {
+  const response = await axios.get(
+    `${BASE_PATH}/movie/${movieId}?api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
+}
+
+export function useMovieDetails(movieId: number) {
+  return useQuery<IDetail>(
+    ['movieDetail', movieId],
+    () => getMovieDetails(movieId),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!movieId,
     }
   );
 }

@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
 import { useState } from 'react';
-import ContentDetail from './ContentDetail';
 import { makeImagePath } from '../utils';
 import SlideBtn from './SlideBtn';
 import { IContentResult } from '../api';
@@ -141,11 +140,8 @@ export default function Slider({ data, title, category }: ISlider) {
   };
 
   const onBoxClicked = (category: string, movieId: number) => {
-    navigate(`/movies/${category}/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
-
-  const clickedMovie =
-    movieId && data?.results.find((movie) => movie.id === +movieId);
 
   return (
     <Wrapper>
@@ -187,9 +183,6 @@ export default function Slider({ data, title, category }: ISlider) {
         </AnimatePresence>
         <SlideBtn prevBtn={prevPage} nextBtn={nextPage} />
       </Container>
-      {movieId && (
-        <ContentDetail clickedMovie={clickedMovie} category={category} />
-      )}
     </Wrapper>
   );
 }

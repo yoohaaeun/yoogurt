@@ -9,6 +9,8 @@ import {
   useMotionValueEvent,
   useScroll,
 } from 'framer-motion';
+import ContentDetail from '../components/ContentDetail';
+import { useParams } from 'react-router-dom';
 
 const Wrapper = styled.div<{ $bgPhoto: string }>`
   width: 100%;
@@ -33,7 +35,7 @@ export default function Home() {
   const popularMoviesQuery = useMoviesByCategory('popular');
   const topRatedMoviesQuery = useMoviesByCategory('top_rated');
   const upcomingMoviesQuery = useMoviesByCategory('upcoming');
-
+  const { movieId } = useParams();
   const { scrollY } = useScroll();
   const bgAnimation = useAnimation();
 
@@ -62,7 +64,7 @@ export default function Home() {
             initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
           >
             {nowPlayingMoviesQuery.data && (
-              <Banner data={nowPlayingMoviesQuery.data} />
+              <Banner data={nowPlayingMoviesQuery.data.results[0]} />
             )}
 
             {popularMoviesQuery.data && (
@@ -94,6 +96,7 @@ export default function Home() {
               />
             )}
           </Container>
+          {movieId && <ContentDetail />}
         </Wrapper>
       )}
     </>
