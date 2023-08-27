@@ -82,16 +82,32 @@ export default function Home() {
         {nowPlayingMovies && <Banner data={nowPlayingMovies} />}
 
         {popularMovies && (
-          <Slider data={popularMovies} title={'보고 또 봐도 좋은 인기 영화'} />
+          <Slider
+            data={popularMovies}
+            category={'popular'}
+            title={'보고 또 봐도 좋은 인기 영화'}
+          />
         )}
         {nowPlayingMovies && (
-          <Slider data={nowPlayingMovies} title={'현재 상영 중인 영화'} />
+          <Slider
+            data={nowPlayingMovies}
+            category={'nowPlaying'}
+            title={'현재 상영 중인 영화'}
+          />
         )}
         {topRatedMovies && (
-          <Slider data={topRatedMovies} title={'평점이 높은 영화'} />
+          <Slider
+            data={topRatedMovies}
+            category={'top_rated'}
+            title={'평점이 높은 영화'}
+          />
         )}
         {upcomingMovies && (
-          <Slider data={upcomingMovies} title={'두근두근 Coming Soon'} />
+          <Slider
+            data={upcomingMovies}
+            category={'upcoming'}
+            title={'두근두근 Coming Soon'}
+          />
         )}
       </Container>
     </Wrapper>

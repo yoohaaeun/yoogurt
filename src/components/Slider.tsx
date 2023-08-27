@@ -5,6 +5,7 @@ import ContentDetail from './ContentDetail';
 import { makeImagePath } from '../utils';
 import SlideBtn from './SlideBtn';
 import { IContentResult } from '../api';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -13,7 +14,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 25px;
+  font-size: 1.5rem;
   margin-bottom: 20px;
 `;
 
@@ -67,6 +68,7 @@ const Info = styled(motion.div)`
 interface ISlider {
   data: IContentResult;
   title: string;
+  category: string;
 }
 
 const rowVariants = {
@@ -109,7 +111,9 @@ const infoVariants = {
 
 const offset = 5;
 
-export default function TestSlider({ data, title }: ISlider) {
+export default function Slider({ data, title, category }: ISlider) {
+  const navigate = useNavigate();
+  const { movieId } = useParams();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isBack, setIsback] = useState(false);
@@ -136,6 +140,13 @@ export default function TestSlider({ data, title }: ISlider) {
     }
   };
 
+  const onBoxClicked = (category: string, movieId: number) => {
+    navigate(`/movies/${category}/${movieId}`);
+  };
+
+  const clickedMovie =
+    movieId && data?.results.find((movie) => movie.id === +movieId);
+
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -158,6 +169,8 @@ export default function TestSlider({ data, title }: ISlider) {
               .slice(offset * index, offset * index + offset)
               .map((movie) => (
                 <Box
+                  layoutId={category + movie.id + ''}
+                  onClick={() => onBoxClicked(category, movie.id)}
                   key={movie.id}
                   variants={boxVariants}
                   initial='normal'
@@ -174,6 +187,11 @@ export default function TestSlider({ data, title }: ISlider) {
         </AnimatePresence>
         <SlideBtn prevBtn={prevPage} nextBtn={nextPage} />
       </Container>
+      <AnimatePresence>
+        {movieId && (
+          <ContentDetail clickedMovie={clickedMovie} category={category} />
+        )}
+      </AnimatePresence>
     </Wrapper>
   );
 }
