@@ -11,6 +11,7 @@ const Overlay = styled(motion.div)`
   left: 0;
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
+  z-index: 99;
 `;
 
 const Container = styled(motion.div)`
@@ -23,6 +24,7 @@ const Container = styled(motion.div)`
   margin: 0 auto;
   border-radius: 10px;
   background-color: ${(props) => props.theme.black.lighter};
+  z-index: 100;
 `;
 
 const Cover = styled.div`
@@ -54,27 +56,29 @@ export default function ContentDetail({ clickedMovie }: any) {
 
   return (
     <>
-      <Overlay
-        onClick={onOverlayCLick}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      />
-      <Container>
-        {clickedMovie && (
-          <>
-            <Cover
-              style={{
-                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                  clickedMovie.backdrop_path,
-                  'w500'
-                )})`,
-              }}
-            />
-            <Title>{clickedMovie.title}</Title>
-            <Overview>{clickedMovie.overview}</Overview>
-          </>
-        )}
-      </Container>
+      {clickedMovie && (
+        <>
+          <Overlay
+            onClick={onOverlayCLick}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <Container>
+            <>
+              <Cover
+                style={{
+                  backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+                    clickedMovie.backdrop_path,
+                    'w500'
+                  )})`,
+                }}
+              />
+              <Title>{clickedMovie.title}</Title>
+              <Overview>{clickedMovie.overview}</Overview>
+            </>
+          </Container>
+        </>
+      )}
     </>
   );
 }

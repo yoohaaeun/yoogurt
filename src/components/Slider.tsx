@@ -187,11 +187,9 @@ export default function Slider({ data, title, category }: ISlider) {
         </AnimatePresence>
         <SlideBtn prevBtn={prevPage} nextBtn={nextPage} />
       </Container>
-      <AnimatePresence>
-        {movieId && (
-          <ContentDetail clickedMovie={clickedMovie} category={category} />
-        )}
-      </AnimatePresence>
+      {movieId && (
+        <ContentDetail clickedMovie={clickedMovie} category={category} />
+      )}
     </Wrapper>
   );
 }

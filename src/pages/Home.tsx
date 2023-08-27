@@ -50,48 +50,52 @@ export default function Home() {
   });
 
   return (
-    <Wrapper
-      $bgPhoto={makeImagePath(
-        nowPlayingMoviesQuery.data?.results[0].backdrop_path || ''
-      )}
-    >
-      <Container
-        animate={bgAnimation}
-        initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
-      >
-        {nowPlayingMoviesQuery.data && (
-          <Banner data={nowPlayingMoviesQuery.data} />
-        )}
+    <>
+      {nowPlayingMoviesQuery.data && (
+        <Wrapper
+          $bgPhoto={makeImagePath(
+            nowPlayingMoviesQuery.data?.results[0].backdrop_path || ''
+          )}
+        >
+          <Container
+            animate={bgAnimation}
+            initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
+          >
+            {nowPlayingMoviesQuery.data && (
+              <Banner data={nowPlayingMoviesQuery.data} />
+            )}
 
-        {popularMoviesQuery.data && (
-          <Slider
-            data={popularMoviesQuery.data}
-            category={'popular'}
-            title={'보고 또 봐도 좋은 인기 영화'}
-          />
-        )}
-        {nowPlayingMoviesQuery.data && (
-          <Slider
-            data={nowPlayingMoviesQuery.data}
-            category={'now_playing'}
-            title={'현재 상영 중인 영화'}
-          />
-        )}
-        {topRatedMoviesQuery.data && (
-          <Slider
-            data={topRatedMoviesQuery.data}
-            category={'top_rated'}
-            title={'평점이 높은 영화'}
-          />
-        )}
-        {upcomingMoviesQuery.data && (
-          <Slider
-            data={upcomingMoviesQuery.data}
-            category={'upcoming'}
-            title={'두근두근 Coming Soon'}
-          />
-        )}
-      </Container>
-    </Wrapper>
+            {popularMoviesQuery.data && (
+              <Slider
+                data={popularMoviesQuery.data}
+                category={'popular'}
+                title={'보고 또 봐도 좋은 인기 영화'}
+              />
+            )}
+            {nowPlayingMoviesQuery.data && (
+              <Slider
+                data={nowPlayingMoviesQuery.data}
+                category={'now_playing'}
+                title={'현재 상영 중인 영화'}
+              />
+            )}
+            {topRatedMoviesQuery.data && (
+              <Slider
+                data={topRatedMoviesQuery.data}
+                category={'top_rated'}
+                title={'평점이 높은 영화'}
+              />
+            )}
+            {upcomingMoviesQuery.data && (
+              <Slider
+                data={upcomingMoviesQuery.data}
+                category={'upcoming'}
+                title={'두근두근 Coming Soon'}
+              />
+            )}
+          </Container>
+        </Wrapper>
+      )}
+    </>
   );
 }
