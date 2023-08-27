@@ -1,11 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import {
-  getNowPlayingMovies,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
-  IContentResult,
-} from '../api';
+import { useMoviesByCategory } from '../api';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import Slider from '../components/Slider';
@@ -36,28 +29,13 @@ const Container = styled(motion.div)`
 `;
 
 export default function Home() {
+  const nowPlayingMoviesQuery = useMoviesByCategory('now_playing');
+  const popularMoviesQuery = useMoviesByCategory('popular');
+  const topRatedMoviesQuery = useMoviesByCategory('top_rated');
+  const upcomingMoviesQuery = useMoviesByCategory('upcoming');
+
   const { scrollY } = useScroll();
   const bgAnimation = useAnimation();
-
-  const { data: nowPlayingMovies } = useQuery<IContentResult>(
-    ['nowPlaying', 'nowPlaying'],
-    getNowPlayingMovies
-  );
-
-  const { data: popularMovies } = useQuery<IContentResult>(
-    ['popular', 'popular'],
-    getPopularMovies
-  );
-
-  const { data: topRatedMovies } = useQuery<IContentResult>(
-    ['top_rated', 'top_rated'],
-    getTopRatedMovies
-  );
-
-  const { data: upcomingMovies } = useQuery<IContentResult>(
-    ['upcoming', 'upcoming'],
-    getUpcomingMovies
-  );
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     if (y > 150) {
@@ -73,38 +51,42 @@ export default function Home() {
 
   return (
     <Wrapper
-      $bgPhoto={makeImagePath(nowPlayingMovies?.results[0].backdrop_path || '')}
+      $bgPhoto={makeImagePath(
+        nowPlayingMoviesQuery.data?.results[0].backdrop_path || ''
+      )}
     >
       <Container
         animate={bgAnimation}
         initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
       >
-        {nowPlayingMovies && <Banner data={nowPlayingMovies} />}
+        {nowPlayingMoviesQuery.data && (
+          <Banner data={nowPlayingMoviesQuery.data} />
+        )}
 
-        {popularMovies && (
+        {popularMoviesQuery.data && (
           <Slider
-            data={popularMovies}
+            data={popularMoviesQuery.data}
             category={'popular'}
             title={'보고 또 봐도 좋은 인기 영화'}
           />
         )}
-        {nowPlayingMovies && (
+        {nowPlayingMoviesQuery.data && (
           <Slider
-            data={nowPlayingMovies}
-            category={'nowPlaying'}
+            data={nowPlayingMoviesQuery.data}
+            category={'now_playing'}
             title={'현재 상영 중인 영화'}
           />
         )}
-        {topRatedMovies && (
+        {topRatedMoviesQuery.data && (
           <Slider
-            data={topRatedMovies}
+            data={topRatedMoviesQuery.data}
             category={'top_rated'}
             title={'평점이 높은 영화'}
           />
         )}
-        {upcomingMovies && (
+        {upcomingMoviesQuery.data && (
           <Slider
-            data={upcomingMovies}
+            data={upcomingMoviesQuery.data}
             category={'upcoming'}
             title={'두근두근 Coming Soon'}
           />

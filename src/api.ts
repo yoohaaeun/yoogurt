@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 const API_KEY = '76819e38cf8b722862e7930703629b13';
 const BASE_PATH = 'https://api.themoviedb.org/3';
 const LANGUAGE = 'ko-KR';
@@ -24,94 +26,92 @@ export interface IContentResult {
 
 // MOVIE LISTS
 
-function getMoviesByCategory(category: string) {
-  return fetch(
+export async function getMoviesByCategory(category: string) {
+  const response = await axios.get(
     `${BASE_PATH}/movie/${category}?api_key=${API_KEY}&language=${LANGUAGE}`
-  ).then((response) => response.json());
+  );
+  return response.data;
 }
 
-export function getNowPlayingMovies() {
-  return getMoviesByCategory('now_playing');
-}
-
-export function getPopularMovies() {
-  return getMoviesByCategory('popular');
-}
-
-export function getTopRatedMovies() {
-  return getMoviesByCategory('top_rated');
-}
-
-export function getUpcomingMovies() {
-  return getMoviesByCategory('upcoming');
+export function useMoviesByCategory(category: string) {
+  return useQuery<IContentResult>(
+    ['movies', category],
+    () => getMoviesByCategory(category),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 }
 
 // TV SERIES LISTS
 
-function getTVSeriesByCategory(category: string) {
-  return fetch(
+export async function getTVSeriesByCategory(category: string) {
+  const response = await axios.get(
     `${BASE_PATH}/tv/${category}?api_key=${API_KEY}&language=${LANGUAGE}`
-  ).then((response) => response.json());
+  );
+  return response.data;
 }
 
-export function getPopularTVSeries() {
-  return getTVSeriesByCategory('popular');
-}
-
-export function getTopRatedTVSeries() {
-  return getTVSeriesByCategory('top_rated');
-}
-
-export function getAiringTodayTVSeries() {
-  return getTVSeriesByCategory('airing_today');
-}
-
-export function getOnTheAirTVSeries() {
-  return getTVSeriesByCategory('on_the_air');
-}
-
-interface IGenre {
-  id: number;
-  name: string;
-}
-
-export interface IGetGenreListResult {
-  genres: IGenre[];
+export function useTVSeriesByCategory(category: string) {
+  return useQuery<IContentResult>(
+    ['tvSeries', category],
+    () => getTVSeriesByCategory(category),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 }
 
 // GENRES
 
-export function getGenres(type: string) {
-  return fetch(
+export async function getGenres(type: string) {
+  const response = await axios.get(
     `${BASE_PATH}/genre/${type}/list?language=ko&api_key=${API_KEY}`
-  ).then((response) => response.json());
+  );
+  return response.data;
 }
 
-export function getMediaByGenre(type: string, genreName: string) {
-  return getGenres(type).then((genres) => {
-    const genre = genres.genres.find(
-      (g: { name: string }) => g.name === genreName
+export async function getMediaByGenre(type: string, genreName: string) {
+  const genresResponse = await getGenres(type);
+  const genre = genresResponse.genres.find(
+    (g: { name: string }) => g.name === genreName
+  );
+
+  if (genre) {
+    const response = await axios.get(
+      `${BASE_PATH}/${type}/${genre.id}?language=ko&api_key=${API_KEY}`
     );
-    if (genre) {
-      return fetch(
-        `${BASE_PATH}/${type}/${genre.id}?language=ko&api_key=${API_KEY}`
-      ).then((response) => response.json());
-    } else {
-      return Promise.reject(`Genre ${genreName} not found`);
+    return response.data;
+  } else {
+    return Promise.reject(`Genre ${genreName} not found`);
+  }
+}
+
+export function useMediaByGenre(type: string, genreName: string) {
+  return useQuery<IContentResult>(
+    ['media', type, genreName],
+    () => getMediaByGenre(type, genreName),
+    {
+      staleTime: 1000 * 60 * 5,
     }
-  });
+  );
 }
 
 // TRENDING
 
-export function getWeeklyTrendingMovies() {
-  return fetch(
-    `${BASE_PATH}/trending/movie/week?api_key=${API_KEY}&language=${LANGUAGE}`
-  ).then((response) => response.json());
+export async function getWeeklyTrendingMedia(type: string) {
+  const response = await axios.get(
+    `${BASE_PATH}/trending/${type}/week?api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
 }
 
-export function getWeeklyTrendingTVSeries() {
-  return fetch(
-    `${BASE_PATH}/trending/tv/week?api_key=${API_KEY}&language=${LANGUAGE}`
-  ).then((response) => response.json());
+export function useWeeklyTrendingMedia(type: string) {
+  return useQuery<IContentResult>(
+    ['trendingMedia', type],
+    () => getWeeklyTrendingMedia(type),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 }
