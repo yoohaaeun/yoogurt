@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
-import { useMovieDetails } from '../api';
+import { useMovieDetails, useMovieVideos } from '../api';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -16,7 +16,7 @@ const Overlay = styled(motion.div)`
 `;
 
 const Container = styled(motion.div)`
-  width: 650px;
+  width: 700px;
   height: 650px;
   position: fixed;
   top: 50%;
@@ -24,15 +24,15 @@ const Container = styled(motion.div)`
   transform: translate(-50%, -50%);
   margin: 0 auto;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.black.black};
+  background-color: ${(props) => props.theme.black.veryDark};
   z-index: 100;
 `;
 
-const Cover = styled.div<{ photo: string }>`
+const Cover = styled.div<{ $bgPhoto: string }>`
   width: 100%;
   height: 50%;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.photo});
+    url(${(props) => props.$bgPhoto});
   background-size: cover;
   background-position: center center;
   border-radius: 10px 10px 0 0;
@@ -41,7 +41,7 @@ const Cover = styled.div<{ photo: string }>`
 
 const Title = styled.h3`
   color: ${(props) => props.theme.white.lighter};
-  padding: 15px 30px;
+  padding: 10px 30px;
   font-size: 45px;
   position: absolute;
   bottom: 0;
@@ -49,7 +49,7 @@ const Title = styled.h3`
 
 const Section = styled.section`
   display: flex;
-  padding: 0 30px;
+  padding: 10px 30px;
   color: ${(props) => props.theme.white.lighter};
 `;
 
@@ -118,11 +118,44 @@ const Overview = styled.p`
   line-height: 1.3;
 `;
 
+const Aside = styled.aside`
+  width: 190px;
+  margin-left: 10px;
+  padding: 10px 10px;
+`;
+
+const Trailer = styled.div`
+  iframe {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+`;
+
+const Cast = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  div {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid ${(props) => props.theme.white.lighter};
+    background-color: #575757;
+  }
+`;
+
 export default function ContentDetail() {
   const navigate = useNavigate();
   const onOverlayCLick = () => navigate('/');
   const { movieId } = useParams();
   const { data } = useMovieDetails(Number(movieId));
+  const { data: trailerData } = useMovieVideos(Number(movieId));
+  const trailers = trailerData?.results.filter(
+    (video) => video.type === 'Trailer'
+  );
 
   function formatTime(minutes: number) {
     const hours = Math.floor(minutes / 60);
@@ -161,7 +194,7 @@ export default function ContentDetail() {
             exit={{ opacity: 0 }}
           />
           <Container>
-            <Cover photo={makeImagePath(data.backdrop_path)}>
+            <Cover $bgPhoto={makeImagePath(data.backdrop_path)}>
               <Title>{data.title}</Title>
             </Cover>
 
@@ -194,6 +227,27 @@ export default function ContentDetail() {
                 {data?.tagline && <Tagline>"{data.tagline}"</Tagline>}
                 {data?.overview && <Overview>{data.overview}</Overview>}
               </Article>
+
+              <Aside>
+                {trailers && trailers.length > 0 && (
+                  <Trailer>
+                    <iframe
+                      id='player'
+                      title='Movie Trailer'
+                      width='100%'
+                      height='640'
+                      src={`http://www.youtube.com/embed/${trailers[0].key}`}
+                      frameBorder='0'
+                    />
+                  </Trailer>
+                )}
+                <Info>Cast</Info>
+                <Cast>
+                  {cast.map((person, index) => (
+                    <div key={index}>{person}</div>
+                  ))}
+                </Cast>
+              </Aside>
             </Section>
           </Container>
         </>
@@ -201,3 +255,5 @@ export default function ContentDetail() {
     </>
   );
 }
+
+const cast = ['', '', '', '', '', ''];

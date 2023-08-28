@@ -169,3 +169,31 @@ export function useMovieDetails(movieId: number) {
     }
   );
 }
+
+interface Video {
+  key: any;
+  type: string;
+}
+
+export interface IVideos {
+  id: number;
+  results: Video[];
+}
+
+export async function getMovieVideos(movieId: number) {
+  const response = await axios.get(
+    `${BASE_PATH}/movie/${movieId}/videos?api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
+}
+
+export function useMovieVideos(movieId: number) {
+  return useQuery<IVideos>(
+    ['movieVideos', movieId],
+    () => getMovieVideos(movieId),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!movieId,
+    }
+  );
+}
