@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
-import { useMovieDetails, useMovieVideos } from '../api';
+import { useMovieCredits, useMovieDetails, useMovieVideos } from '../api';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -136,14 +136,47 @@ const Trailer = styled.div`
 const Cast = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  row-gap: 10px;
+  column-gap: 17px;
+`;
 
-  div {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 1.5px solid ${(props) => props.theme.white.lighter};
-    background-color: #575757;
+const CastMemberCard = styled.div`
+  text-align: center;
+  position: relative;
+
+  &:hover {
+    .hover-InfoBox {
+      display: inline-block;
+    }
+  }
+`;
+
+const ProfileImg = styled.div<{ $imageSrc: string }>`
+  width: 45px;
+  height: 45px;
+  background-image: url(${(props) => props.$imageSrc});
+  background-size: cover;
+  background-position: center center;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+`;
+
+const InfoBox = styled.div`
+  display: none;
+  position: absolute;
+  bottom: -45px;
+  left: -23px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 3px 6px;
+  z-index: 100;
+  background-color: #575757;
+  line-height: 1.3;
+
+  p:last-child {
+    color: #adacac;
+    font-size: 11px;
   }
 `;
 
@@ -152,10 +185,20 @@ export default function ContentDetail() {
   const onOverlayCLick = () => navigate('/');
   const { movieId } = useParams();
   const { data } = useMovieDetails(Number(movieId));
-  const { data: trailerData } = useMovieVideos(Number(movieId));
-  const trailers = trailerData?.results.filter(
+  const { data: movieVideosData } = useMovieVideos(Number(movieId));
+  const { data: movieCreditsData } = useMovieCredits(Number(movieId));
+
+  const trailers = movieVideosData?.results.filter(
     (video) => video.type === 'Trailer'
   );
+
+  const simplifiedCast = movieCreditsData?.cast
+    .slice(0, 6)
+    .map((castMember) => ({
+      character: castMember.character,
+      name: castMember.name,
+      profile_path: castMember.profile_path,
+    }));
 
   function formatTime(minutes: number) {
     const hours = Math.floor(minutes / 60);
@@ -201,7 +244,7 @@ export default function ContentDetail() {
             <Section>
               <article>
                 {data?.poster_path && (
-                  <Poster src={makeImagePath(data.poster_path || '')} alt='' />
+                  <Poster src={makeImagePath(data.poster_path)} alt='' />
                 )}
               </article>
 
@@ -242,11 +285,23 @@ export default function ContentDetail() {
                   </Trailer>
                 )}
                 <Info>Cast</Info>
-                <Cast>
-                  {cast.map((person, index) => (
-                    <div key={index}>{person}</div>
-                  ))}
-                </Cast>
+                {movieCreditsData && (
+                  <Cast>
+                    {simplifiedCast?.map((castMember, index) => (
+                      <CastMemberCard key={index}>
+                        {castMember.profile_path && (
+                          <ProfileImg
+                            $imageSrc={makeImagePath(castMember.profile_path)}
+                          />
+                        )}
+                        <InfoBox className='hover-InfoBox'>
+                          <p>{castMember.name}</p>
+                          <p>{castMember.character}</p>
+                        </InfoBox>
+                      </CastMemberCard>
+                    ))}
+                  </Cast>
+                )}
               </Aside>
             </Section>
           </Container>
@@ -255,5 +310,3 @@ export default function ContentDetail() {
     </>
   );
 }
-
-const cast = ['', '', '', '', '', ''];

@@ -170,12 +170,14 @@ export function useMovieDetails(movieId: number) {
   );
 }
 
+// Videos
+
 interface Video {
   key: any;
   type: string;
 }
 
-export interface IVideos {
+interface IVideos {
   id: number;
   results: Video[];
 }
@@ -191,6 +193,37 @@ export function useMovieVideos(movieId: number) {
   return useQuery<IVideos>(
     ['movieVideos', movieId],
     () => getMovieVideos(movieId),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!movieId,
+    }
+  );
+}
+
+// Credits
+
+interface CastMember {
+  character: string;
+  name: string;
+  profile_path: string | null;
+}
+
+interface ICredits {
+  id: number;
+  cast: CastMember[];
+}
+
+export async function getMovieCredits(movieId: number) {
+  const response = await axios.get(
+    `${BASE_PATH}/movie/${movieId}/credits?api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
+}
+
+export function useMovieCredits(movieId: number) {
+  return useQuery<ICredits>(
+    ['movieCredits', movieId],
+    () => getMovieCredits(movieId),
     {
       staleTime: 1000 * 60 * 5,
       enabled: !!movieId,
