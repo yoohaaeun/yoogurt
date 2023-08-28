@@ -73,9 +73,7 @@ input {
   outline: none;
 }
 
-::-webkit-scrollbar {
-display: none;
-}
+
 `;
 
 export default GlobalStyle;

@@ -10,46 +10,112 @@ const Overlay = styled(motion.div)`
   height: 100vh;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
   z-index: 99;
 `;
 
 const Container = styled(motion.div)`
+  width: 650px;
+  height: 650px;
   position: fixed;
-  width: 40vw;
-  height: 80vh;
-  top: 120px;
-  left: 0;
-  right: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   margin: 0 auto;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.black};
   z-index: 100;
-  overflow: auto;
 `;
 
-const Cover = styled.div`
+const Cover = styled.div<{ photo: string }>`
   width: 100%;
+  height: 50%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.photo});
   background-size: cover;
   background-position: center center;
-  height: 400px;
   border-radius: 10px 10px 0 0;
+  position: relative;
 `;
 
 const Title = styled.h3`
   color: ${(props) => props.theme.white.lighter};
-  padding: 20px;
-  font-size: 46px;
-  position: relative;
-  top: -80px;
+  padding: 15px 30px;
+  font-size: 45px;
+  position: absolute;
+  bottom: 0;
+`;
+
+const Section = styled.section`
+  display: flex;
+  padding: 0 30px;
+  color: ${(props) => props.theme.white.lighter};
+`;
+
+const Article = styled.article`
+  width: 300px;
+  height: 300px;
+  margin-left: 10px;
+  overflow-y: hidden;
+`;
+
+const Poster = styled.img`
+  width: 130px;
+  border-radius: 5px;
+`;
+
+const Status = styled.p`
+  display: inline-block;
+  padding: 2px 5px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  background-color: #ff5050;
+  font-size: 11px;
+`;
+
+const OriginalTitle = styled.p`
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
+
+const Info = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  font-size: 13px;
+`;
+
+const Rating = styled(Info)`
+  color: #b8b8b8;
+  margin-bottom: 15px;
+  gap: 8px;
+`;
+
+const VoteAverage = styled.p``;
+
+const Icon = styled.p`
+  font-size: 10px;
+  margin-right: 2px;
+`;
+
+const VoteCount = styled.p``;
+
+const Tagline = styled.p`
+  margin-bottom: 5px;
+  font-weight: bold;
+  margin-bottom: 15px;
 `;
 
 const Overview = styled.p`
-  padding: 20px;
-  position: relative;
-  top: -80px;
-  color: ${(props) => props.theme.white.lighter};
+  width: 100%;
+  height: 150px;
+  padding-right: 17px;
+  overflow-y: auto;
+  color: #b8b8b8;
+  font-size: 13px;
+  line-height: 1.3;
 `;
 
 export default function ContentDetail() {
@@ -57,6 +123,33 @@ export default function ContentDetail() {
   const onOverlayCLick = () => navigate('/');
   const { movieId } = useParams();
   const { data } = useMovieDetails(Number(movieId));
+
+  function formatTime(minutes: number) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    let formattedTime = '';
+    if (hours > 0) {
+      formattedTime += `${hours}h `;
+    }
+    if (remainingMinutes > 0) {
+      formattedTime += `${remainingMinutes}min`;
+    }
+
+    return formattedTime;
+  }
+
+  const roundedRating = data?.vote_average.toFixed(2);
+
+  function generateStars(count: number) {
+    const starCount = Math.round(count / 2);
+    let stars = '';
+    for (let i = 0; i < starCount; i++) {
+      stars += '⭐️ ';
+    }
+
+    return stars;
+  }
 
   return (
     <>
@@ -68,61 +161,40 @@ export default function ContentDetail() {
             exit={{ opacity: 0 }}
           />
           <Container>
-            <>
-              <Cover
-                style={{
-                  backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                    data.backdrop_path,
-                    'w500'
-                  )})`,
-                }}
-              />
+            <Cover photo={makeImagePath(data.backdrop_path)}>
               <Title>{data.title}</Title>
-              <Overview>{data.overview}</Overview>
-              <p>장르 : {data.genres[0].name}</p>
-              <p>id : {data.id}</p>
-              <p>original_title : {data.original_title}</p>
-              <p>영화의 인기도 : {data.popularity}</p>
-              <p>개봉일 : {data.release_date}</p>
-              <p>러닝타임 : {data.runtime}</p>
-              <p>개봉여부 : {data.status}</p>
-              <p>슬로건 : {data.tagline}</p>
-              <p>평점: {data.vote_average}</p>
-              <p>투표자 수 : {data.vote_count}</p>
-              {data?.poster_path && (
-                <img
-                  src={makeImagePath(data.poster_path || '')}
-                  style={{ width: '200px' }}
-                  alt=''
-                />
-              )}
-              {data?.backdrop_path && (
-                <img
-                  src={makeImagePath(data.backdrop_path || '')}
-                  style={{ width: '200px' }}
-                  alt=''
-                />
-              )}
-              {data?.production_companies && (
-                <img
-                  src={makeImagePath(
-                    data.production_companies[0].logo_path || ''
-                  )}
-                  style={{ width: '200px' }}
-                  alt=''
-                />
-              )}
+            </Cover>
 
-              {data?.production_companies && (
-                <img
-                  src={makeImagePath(
-                    data.production_companies[1].logo_path || ''
-                  )}
-                  style={{ width: '200px' }}
-                  alt=''
-                />
-              )}
-            </>
+            <Section>
+              <article>
+                {data?.poster_path && (
+                  <Poster src={makeImagePath(data.poster_path || '')} alt='' />
+                )}
+              </article>
+
+              <Article>
+                <Status>{data.status}</Status>
+                <OriginalTitle>{data.original_title}</OriginalTitle>
+                <Info>
+                  <p>{data.release_date}</p>
+                  <p>•</p>
+                  <p>{data.genres[0].name}</p>
+                  <p>•</p>
+                  <p>{formatTime(data.runtime)}</p>
+                </Info>
+                <Rating>
+                  <VoteAverage>{roundedRating}</VoteAverage>
+                  <Icon>
+                    {roundedRating !== undefined
+                      ? generateStars(parseInt(roundedRating))
+                      : null}
+                  </Icon>
+                  <VoteCount>{data.vote_count} voted</VoteCount>
+                </Rating>
+                {data?.tagline && <Tagline>"{data.tagline}"</Tagline>}
+                {data?.overview && <Overview>{data.overview}</Overview>}
+              </Article>
+            </Section>
           </Container>
         </>
       )}
