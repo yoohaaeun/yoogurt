@@ -230,3 +230,38 @@ export function useMovieCredits(movieId: number) {
     }
   );
 }
+
+// SEARCH >
+
+interface SearchResult {
+  backdrop_path: string | null;
+  id: number;
+  title?: string;
+  poster_path: string | null;
+  name?: string;
+}
+
+interface SearchResponse {
+  page: number;
+  results: SearchResult[];
+  total_pages: number;
+  total_results: number;
+}
+
+export async function getSearchResults(type: string, keyword: string) {
+  const response = await axios.get(
+    `${BASE_PATH}/search/${type}?query=${keyword}&api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
+}
+
+export function useSearchResults(type: string, keyword: string) {
+  return useQuery<SearchResponse>(
+    ['searchResults', type, keyword],
+    () => getSearchResults(type, keyword),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!type || !!keyword,
+    }
+  );
+}
