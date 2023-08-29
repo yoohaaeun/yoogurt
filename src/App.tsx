@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
 import Root from './pages/Root';
 import Search from './pages/Search';
 import Tv from './pages/Tv';
@@ -9,7 +10,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <div>NotFound</div>,
+    errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
       { path: '/movies/:movieId', element: <Home /> },
