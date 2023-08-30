@@ -84,10 +84,10 @@ export default function Search() {
   const { data: movieData } = useSearchResults('movie', keyword);
   const { data: tvData } = useSearchResults('tv', keyword);
 
-  const { movieId } = useParams();
+  const { contentId } = useParams();
 
   const onClicked = (contentId: number) => {
-    navigate(`/search/movies/${contentId}?keyword=${keyword}`, {
+    navigate(`/search/${contentId}`, {
       state: { keyword },
     });
   };
@@ -135,7 +135,7 @@ export default function Search() {
             <Item
               key={tv.id}
               onClick={() => {
-                handleContentClick(tv.id);
+                onClicked(tv.id);
               }}
             >
               {tv.backdrop_path === null ? (
@@ -151,7 +151,7 @@ export default function Search() {
           ))
         )}
       </Container>
-      {movieId && <ContentDetail />}
+      {contentId && <ContentDetail />}
     </Wrapper>
   );
 }

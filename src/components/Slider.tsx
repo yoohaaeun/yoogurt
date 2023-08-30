@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { makeImagePath } from '../utils';
 import SlideBtn from './SlideBtn';
 import { IContentResult } from '../api';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -112,7 +112,6 @@ const offset = 5;
 
 export default function Slider({ data, title, category }: ISlider) {
   const navigate = useNavigate();
-  const { movieId } = useParams();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isBack, setIsback] = useState(false);
@@ -139,8 +138,8 @@ export default function Slider({ data, title, category }: ISlider) {
     }
   };
 
-  const onBoxClicked = (category: string, movieId: number) => {
-    navigate(`/movies/${movieId}`);
+  const onBoxClicked = (contentId: number) => {
+    navigate(`/movies/${contentId}`);
   };
 
   return (
@@ -163,19 +162,19 @@ export default function Slider({ data, title, category }: ISlider) {
           >
             {data?.results
               .slice(offset * index, offset * index + offset)
-              .map((movie) => (
+              .map((contents) => (
                 <Box
-                  layoutId={category + movie.id + ''}
-                  onClick={() => onBoxClicked(category, movie.id)}
-                  key={movie.id}
+                  layoutId={category + contents.id + ''}
+                  onClick={() => onBoxClicked(contents.id)}
+                  key={contents.id}
                   variants={boxVariants}
                   initial='normal'
                   whileHover='hover'
                   transition={{ type: 'tween' }}
-                  $bgPhoto={makeImagePath(movie.backdrop_path)}
+                  $bgPhoto={makeImagePath(contents.backdrop_path)}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{movie.title}</h4>
+                    <h4>{contents.title}</h4>
                   </Info>
                 </Box>
               ))}

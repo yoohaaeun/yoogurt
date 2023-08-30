@@ -35,7 +35,7 @@ export default function Home() {
   const popularMoviesQuery = useMoviesByCategory('popular');
   const topRatedMoviesQuery = useMoviesByCategory('top_rated');
   const upcomingMoviesQuery = useMoviesByCategory('upcoming');
-  const { movieId } = useParams();
+  const { contentId } = useParams();
   const { scrollY } = useScroll();
   const bgAnimation = useAnimation();
 
@@ -96,7 +96,7 @@ export default function Home() {
               />
             )}
           </Container>
-          {movieId && <ContentDetail />}
+          {contentId && <ContentDetail />}
         </Wrapper>
       )}
     </>

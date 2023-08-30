@@ -13,12 +13,11 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
-      { path: '/movies/:movieId', element: <Home /> },
+      { path: '/movies/:contentId', element: <Home /> },
       { path: '/tv', element: <Tv /> },
-      { path: '/movies', element: <Tv /> },
-      { path: '/new-and-popular', element: <Tv /> },
+      { path: '/tv/:contentId', element: <Tv /> },
       { path: '/search', element: <Search /> },
-      { path: '/search/movies/:movieId', element: <Search /> },
+      { path: '/search/:contentId', element: <Search /> },
     ],
   },
 ]);

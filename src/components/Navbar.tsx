@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useMatch, useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   motion,
@@ -83,7 +83,7 @@ const Search = styled.form`
 const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
-  right: 1rem;
+  right: 0.6rem;
   padding: 0.5rem 0.3rem;
   padding-left: 3rem;
   border: 1px solid ${(props) => props.theme.white.lighter};
@@ -141,7 +141,7 @@ export default function Navbar() {
           </Item>
           <Item>
             <Link to='/tv'>
-              시리즈 {tvMatch && <Circle layoutId='circle' />}
+              TV프로그램 {tvMatch && <Circle layoutId='circle' />}
             </Link>
           </Item>
           <Item>영화</Item>

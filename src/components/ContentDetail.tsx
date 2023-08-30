@@ -151,7 +151,19 @@ const CastMemberCard = styled.div`
   }
 `;
 
-const ProfileImg = styled.div<{ $imageSrc: string }>`
+const DefaultAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  background-color: #575757;
+  font-size: 7px;
+`;
+
+const ProfileAvatar = styled.div<{ $imageSrc: string }>`
   width: 45px;
   height: 45px;
   background-image: url(${(props) => props.$imageSrc});
@@ -183,10 +195,10 @@ const InfoBox = styled.div`
 export default function ContentDetail() {
   const navigate = useNavigate();
   const onOverlayCLick = () => navigate(-1);
-  const { movieId } = useParams();
-  const { data } = useMovieDetails(Number(movieId));
-  const { data: movieVideosData } = useMovieVideos(Number(movieId));
-  const { data: movieCreditsData } = useMovieCredits(Number(movieId));
+  const { contentId } = useParams();
+  const { data } = useMovieDetails(Number(contentId));
+  const { data: movieVideosData } = useMovieVideos(Number(contentId));
+  const { data: movieCreditsData } = useMovieCredits(Number(contentId));
 
   const trailers = movieVideosData?.results.filter(
     (video) => video.type === 'Trailer'
@@ -289,8 +301,13 @@ export default function ContentDetail() {
                   <Cast>
                     {simplifiedCast?.map((castMember, index) => (
                       <CastMemberCard key={index}>
-                        {castMember.profile_path && (
-                          <ProfileImg
+                        {castMember.profile_path === null ? (
+                          <DefaultAvatar>
+                            이미지
+                            <br /> 없음
+                          </DefaultAvatar>
+                        ) : (
+                          <ProfileAvatar
                             $imageSrc={makeImagePath(castMember.profile_path)}
                           />
                         )}
