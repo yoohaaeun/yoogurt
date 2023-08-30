@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
@@ -182,7 +182,7 @@ const InfoBox = styled.div`
 
 export default function ContentDetail() {
   const navigate = useNavigate();
-  const onOverlayCLick = () => navigate('/');
+  const onOverlayCLick = () => navigate(-1);
   const { movieId } = useParams();
   const { data } = useMovieDetails(Number(movieId));
   const { data: movieVideosData } = useMovieVideos(Number(movieId));

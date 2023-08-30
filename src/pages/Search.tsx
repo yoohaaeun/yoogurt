@@ -1,12 +1,15 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSearchResults } from '../api';
+import ContentDetail from '../components/ContentDetail';
 import { makeImagePath } from '../utils';
 
 const Wrapper = styled.div`
   width: 100vw;
-  background-color: ${(props) => props.theme.black.darker};
   padding: 7.5rem 3.75rem;
+  background-color: ${(props) => props.theme.black.darker};
+  min-height: 100vh;
 `;
 
 const Text = styled.h2`
@@ -22,7 +25,7 @@ const Text = styled.h2`
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 2.5rem;
+  gap: 3rem;
   margin-bottom: 4rem;
 
   p {
@@ -34,6 +37,8 @@ const Item = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.3s ease 0s;
+  cursor: pointer;
 
   div {
     display: flex;
@@ -54,18 +59,38 @@ const Item = styled.div`
     margin-bottom: 0.9rem;
   }
 
-  h2 {
+  h5 {
     line-height: 1.4;
     text-align: center;
+    color: lightgray;
+    transition: color 0.3s ease-in-out;
+  }
+
+  &:hover {
+    transform: scale(1.15);
+
+    h5 {
+      color: white;
+    }
   }
 `;
 
 export default function Search() {
+  const navigate = useNavigate();
   const {
     state: { keyword },
   } = useLocation();
+
   const { data: movieData } = useSearchResults('movie', keyword);
   const { data: tvData } = useSearchResults('tv', keyword);
+
+  const { movieId } = useParams();
+
+  const onClicked = (contentId: number) => {
+    navigate(`/search/movies/${contentId}?keyword=${keyword}`, {
+      state: { keyword },
+    });
+  };
 
   return (
     <Wrapper>
@@ -78,7 +103,12 @@ export default function Search() {
           <p>'{keyword}'검색 결과가 없습니다.</p>
         ) : (
           movieData?.results.map((movie) => (
-            <Item key={movie.id}>
+            <Item
+              key={movie.id}
+              onClick={() => {
+                onClicked(movie.id);
+              }}
+            >
               {movie.backdrop_path === null ? (
                 <div>이미지 없음</div>
               ) : (
@@ -87,7 +117,7 @@ export default function Search() {
                   alt={movie.name}
                 />
               )}
-              <h2>{movie.title}</h2>
+              <h5>{movie.title}</h5>
             </Item>
           ))
         )}
@@ -102,7 +132,12 @@ export default function Search() {
           <p>'{keyword}'검색 결과가 없습니다.</p>
         ) : (
           tvData?.results.map((tv) => (
-            <Item key={tv.id}>
+            <Item
+              key={tv.id}
+              onClick={() => {
+                handleContentClick(tv.id);
+              }}
+            >
               {tv.backdrop_path === null ? (
                 <div>이미지 없음</div>
               ) : (
@@ -111,11 +146,12 @@ export default function Search() {
                   alt={tv.name}
                 />
               )}
-              <h2>{tv.name}</h2>
+              <h5>{tv.name}</h5>
             </Item>
           ))
         )}
       </Container>
+      {movieId && <ContentDetail />}
     </Wrapper>
   );
 }
