@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { IContent } from '../api';
 import { LuInfo } from 'react-icons/lu';
-import ContentDetail from './ContentDetail';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -53,29 +51,31 @@ const InfoIcon = styled(LuInfo)`
 
 interface IBanner {
   data: IContent;
+  type: string;
 }
 
-export default function Banner({ data }: IBanner) {
+export default function Banner({ data, type }: IBanner) {
   const navigate = useNavigate();
-  const [showContentDetail, setShowContentDetail] = useState(false);
-  const handleInfoClick = () => {
-    navigate(`/movies/${data.id}`);
-    setShowContentDetail(true);
+  const onClicked = () => {
+    if (type === 'movie') {
+      navigate(`/movies/${data.id}`);
+    } else if (type === 'tv') {
+      navigate(`/tvSeries/${data.id}`);
+    }
   };
 
   return (
     <>
       {data && (
         <Wrapper>
-          <Title>{data.title}</Title>
+          <Title>{data.title ? data.title : data.name}</Title>
           <Overview>{data.overview}</Overview>
-          <Info onClick={handleInfoClick}>
+          <Info onClick={onClicked}>
             <InfoIcon />
             <span>상세 정보</span>
           </Info>
         </Wrapper>
       )}
-      {showContentDetail && <ContentDetail />}
     </>
   );
 }

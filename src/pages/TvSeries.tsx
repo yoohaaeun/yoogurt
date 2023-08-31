@@ -1,4 +1,4 @@
-import { useMoviesByCategory } from '../api';
+import { useTVSeriesByCategory } from '../api';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import Slider from '../components/Slider';
@@ -30,11 +30,10 @@ const Container = styled(motion.div)`
   padding: 0 150px 60px 150px;
 `;
 
-export default function Home() {
-  const nowPlayingMoviesQuery = useMoviesByCategory('now_playing');
-  const popularMoviesQuery = useMoviesByCategory('popular');
-  const topRatedMoviesQuery = useMoviesByCategory('top_rated');
-  const upcomingMoviesQuery = useMoviesByCategory('upcoming');
+export default function TvSeries() {
+  const topRatedTvQuery = useTVSeriesByCategory('top_rated');
+  const onTheAirTvQuery = useTVSeriesByCategory('on_the_air');
+  const popularTvQuery = useTVSeriesByCategory('popular');
   const { contentId } = useParams();
   const { scrollY } = useScroll();
   const bgAnimation = useAnimation();
@@ -53,52 +52,40 @@ export default function Home() {
 
   return (
     <>
-      {nowPlayingMoviesQuery.data && (
+      {topRatedTvQuery.data && (
         <Wrapper
           $bgPhoto={makeImagePath(
-            nowPlayingMoviesQuery.data?.results[0].backdrop_path || ''
+            topRatedTvQuery.data?.results[0].backdrop_path || ''
           )}
         >
           <Container
             animate={bgAnimation}
             initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
           >
-            {nowPlayingMoviesQuery.data && (
-              <Banner
-                data={nowPlayingMoviesQuery.data.results[0]}
-                type={TYPE}
-              />
+            {topRatedTvQuery.data && (
+              <Banner data={topRatedTvQuery.data.results[0]} type={TYPE} />
             )}
-
-            {popularMoviesQuery.data && (
+            {topRatedTvQuery.data && (
               <Slider
-                data={popularMoviesQuery.data}
-                category={'popular'}
-                title={'보고 또 봐도 좋은 인기 영화'}
-                type={TYPE}
-              />
-            )}
-            {nowPlayingMoviesQuery.data && (
-              <Slider
-                data={nowPlayingMoviesQuery.data}
-                category={'now_playing'}
-                title={'현재 상영 중인 영화'}
-                type={TYPE}
-              />
-            )}
-            {topRatedMoviesQuery.data && (
-              <Slider
-                data={topRatedMoviesQuery.data}
+                data={topRatedTvQuery.data}
                 category={'top_rated'}
-                title={'평점이 높은 영화'}
+                title={'믿고 보는 유플릭스 추천작'}
                 type={TYPE}
               />
             )}
-            {upcomingMoviesQuery.data && (
+            {popularTvQuery.data && (
               <Slider
-                data={upcomingMoviesQuery.data}
-                category={'upcoming'}
-                title={'두근두근 Coming Soon'}
+                data={popularTvQuery.data}
+                category={'popular'}
+                title={'인기 콘텐츠'}
+                type={TYPE}
+              />
+            )}
+            {onTheAirTvQuery.data && (
+              <Slider
+                data={onTheAirTvQuery.data}
+                category={'on_the_air'}
+                title={'현재 방영 중인 TV 프로그램'}
                 type={TYPE}
               />
             )}
@@ -110,4 +97,4 @@ export default function Home() {
   );
 }
 
-const TYPE = 'movie';
+const TYPE = 'tv';

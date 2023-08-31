@@ -80,17 +80,22 @@ export default function Search() {
   const {
     state: { keyword },
   } = useLocation();
-
   const { data: movieData } = useSearchResults('movie', keyword);
   const { data: tvData } = useSearchResults('tv', keyword);
-
   const { contentId } = useParams();
-
   const onClicked = (contentId: number) => {
     navigate(`/search/${contentId}`, {
       state: { keyword },
     });
   };
+
+  const contentType =
+    contentId &&
+    movieData?.results.find((movie) => movie.id === parseInt(contentId))
+      ? 'movie'
+      : contentId && tvData?.results.find((tv) => tv.id === parseInt(contentId))
+      ? 'tv'
+      : null;
 
   return (
     <Wrapper>
@@ -151,7 +156,7 @@ export default function Search() {
           ))
         )}
       </Container>
-      {contentId && <ContentDetail />}
+      {contentId && <ContentDetail type={contentType} />}
     </Wrapper>
   );
 }

@@ -64,62 +64,6 @@ export function useTVSeriesByCategory(category: string) {
   );
 }
 
-// GENRES
-
-export async function getGenres(type: string) {
-  const response = await axios.get(
-    `${BASE_PATH}/genre/${type}/list?language=ko&api_key=${API_KEY}`
-  );
-  return response.data;
-}
-
-export async function getMediaByGenre(type: string, genreName: string) {
-  const genresResponse = await getGenres(type);
-  const genre = genresResponse.genres.find(
-    (g: { name: string }) => g.name === genreName
-  );
-
-  if (genre) {
-    const response = await axios.get(
-      `${BASE_PATH}/${type}/${genre.id}?language=ko&api_key=${API_KEY}`
-    );
-    return response.data;
-  } else {
-    return Promise.reject(`Genre ${genreName} not found`);
-  }
-}
-
-export function useMediaByGenre(type: string, genreName: string) {
-  return useQuery<IContentResult>(
-    ['media', type, genreName],
-    () => getMediaByGenre(type, genreName),
-    {
-      staleTime: 1000 * 60 * 5,
-      enabled: !!type || !!genreName,
-    }
-  );
-}
-
-// TRENDING
-
-export async function getWeeklyTrendingMedia(type: string) {
-  const response = await axios.get(
-    `${BASE_PATH}/trending/${type}/week?api_key=${API_KEY}&language=${LANGUAGE}`
-  );
-  return response.data;
-}
-
-export function useWeeklyTrendingMedia(type: string) {
-  return useQuery<IContentResult>(
-    ['trendingMedia', type],
-    () => getWeeklyTrendingMedia(type),
-    {
-      staleTime: 1000 * 60 * 5,
-      enabled: !!type,
-    }
-  );
-}
-
 // Details
 
 interface IGenres {
@@ -138,34 +82,42 @@ export interface IDetail {
   backdrop_path: string;
   genres: IGenres[];
   id: number;
-  original_title: string;
+  original_title?: string;
+  original_name?: string;
   overview: string;
   popularity: number;
   poster_path: string;
   production_companies: IproductionCompanies[];
-  release_date: string;
+  release_date?: string;
+  first_air_date?: string;
   runtime: number;
   status: string;
   tagline: string;
-  title: string;
+  title?: string;
+  name?: string;
   vote_average: number;
   vote_count: number;
+  number_of_seasons: number;
+  number_of_episodes: number;
 }
 
-export async function getMovieDetails(movieId: number) {
+export async function getContentDetails(
+  type: string | null,
+  contentId: number
+) {
   const response = await axios.get(
-    `${BASE_PATH}/movie/${movieId}?api_key=${API_KEY}&language=${LANGUAGE}`
+    `${BASE_PATH}/${type}/${contentId}?api_key=${API_KEY}&language=${LANGUAGE}`
   );
   return response.data;
 }
 
-export function useMovieDetails(movieId: number) {
+export function useContentDetails(type: string | null, contentId: number) {
   return useQuery<IDetail>(
-    ['movieDetail', movieId],
-    () => getMovieDetails(movieId),
+    ['movieDetail', type, contentId],
+    () => getContentDetails(type, contentId),
     {
       staleTime: 1000 * 60 * 5,
-      enabled: !!movieId,
+      enabled: !!type || !!contentId,
     }
   );
 }
@@ -182,20 +134,20 @@ interface IVideos {
   results: Video[];
 }
 
-export async function getMovieVideos(movieId: number) {
+export async function getContentVideos(type: string | null, contentId: number) {
   const response = await axios.get(
-    `${BASE_PATH}/movie/${movieId}/videos?api_key=${API_KEY}&language=${LANGUAGE}`
+    `${BASE_PATH}/${type}/${contentId}/videos?api_key=${API_KEY}&language=${LANGUAGE}`
   );
   return response.data;
 }
 
-export function useMovieVideos(movieId: number) {
+export function useContentVideos(type: string | null, contentId: number) {
   return useQuery<IVideos>(
-    ['movieVideos', movieId],
-    () => getMovieVideos(movieId),
+    ['movieVideos', type, contentId],
+    () => getContentVideos(type, contentId),
     {
       staleTime: 1000 * 60 * 5,
-      enabled: !!movieId,
+      enabled: !!contentId,
     }
   );
 }
@@ -213,25 +165,28 @@ interface ICredits {
   cast: CastMember[];
 }
 
-export async function getMovieCredits(movieId: number) {
+export async function getContentCredits(
+  type: string | null,
+  contentId: number
+) {
   const response = await axios.get(
-    `${BASE_PATH}/movie/${movieId}/credits?api_key=${API_KEY}&language=${LANGUAGE}`
+    `${BASE_PATH}/${type}/${contentId}/credits?api_key=${API_KEY}&language=${LANGUAGE}`
   );
   return response.data;
 }
 
-export function useMovieCredits(movieId: number) {
+export function useContentCredits(type: string | null, contentId: number) {
   return useQuery<ICredits>(
-    ['movieCredits', movieId],
-    () => getMovieCredits(movieId),
+    ['movieCredits', type, contentId],
+    () => getContentCredits(type, contentId),
     {
       staleTime: 1000 * 60 * 5,
-      enabled: !!movieId,
+      enabled: !!type || !!contentId,
     }
   );
 }
 
-// SEARCH >
+// SEARCH
 
 interface SearchResult {
   backdrop_path: string | null;
@@ -248,14 +203,14 @@ interface SearchResponse {
   total_results: number;
 }
 
-export async function getSearchResults(type: string, keyword: string) {
+export async function getSearchResults(type: string | null, keyword: string) {
   const response = await axios.get(
     `${BASE_PATH}/search/${type}?query=${keyword}&api_key=${API_KEY}&language=${LANGUAGE}`
   );
   return response.data;
 }
 
-export function useSearchResults(type: string, keyword: string) {
+export function useSearchResults(type: string | null, keyword: string) {
   return useQuery<SearchResponse>(
     ['searchResults', type, keyword],
     () => getSearchResults(type, keyword),

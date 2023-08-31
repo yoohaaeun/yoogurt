@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
-import { useMovieCredits, useMovieDetails, useMovieVideos } from '../api';
+import { useContentCredits, useContentDetails, useContentVideos } from '../api';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -192,19 +192,26 @@ const InfoBox = styled.div`
   }
 `;
 
-export default function ContentDetail() {
+interface IContentDetail {
+  type: string | null;
+}
+
+export default function ContentDetail({ type }: IContentDetail) {
   const navigate = useNavigate();
   const onOverlayCLick = () => navigate(-1);
   const { contentId } = useParams();
-  const { data } = useMovieDetails(Number(contentId));
-  const { data: movieVideosData } = useMovieVideos(Number(contentId));
-  const { data: movieCreditsData } = useMovieCredits(Number(contentId));
+  const { data } = useContentDetails(type, Number(contentId));
+  const { data: contentVideosData } = useContentVideos(type, Number(contentId));
+  const { data: contentCreditsData } = useContentCredits(
+    type,
+    Number(contentId)
+  );
 
-  const trailers = movieVideosData?.results.filter(
+  const trailers = contentVideosData?.results.filter(
     (video) => video.type === 'Trailer'
   );
 
-  const simplifiedCast = movieCreditsData?.cast
+  const simplifiedCast = contentCreditsData?.cast
     .slice(0, 6)
     .map((castMember) => ({
       character: castMember.character,
@@ -250,7 +257,7 @@ export default function ContentDetail() {
           />
           <Container>
             <Cover $bgPhoto={makeImagePath(data.backdrop_path)}>
-              <Title>{data.title}</Title>
+              <Title>{data.title ? data.title : data.name}</Title>
             </Cover>
 
             <Section>
@@ -262,13 +269,27 @@ export default function ContentDetail() {
 
               <Article>
                 <Status>{data.status}</Status>
-                <OriginalTitle>{data.original_title}</OriginalTitle>
+                <OriginalTitle>
+                  {data.original_title
+                    ? data.original_title
+                    : data.original_name}
+                </OriginalTitle>
                 <Info>
-                  <p>{data.release_date}</p>
+                  <p>
+                    {data.release_date
+                      ? data.release_date
+                      : data.first_air_date}
+                  </p>
                   <p>•</p>
                   <p>{data.genres[0].name}</p>
                   <p>•</p>
-                  <p>{formatTime(data.runtime)}</p>
+                  <p>
+                    {data.runtime
+                      ? formatTime(data.runtime)
+                      : data.number_of_seasons > 1
+                      ? `시즌 ${data.number_of_seasons}개`
+                      : `에피소드 ${data.number_of_episodes}개`}
+                  </p>
                 </Info>
                 <Rating>
                   <VoteAverage>{roundedRating}</VoteAverage>
@@ -296,28 +317,30 @@ export default function ContentDetail() {
                     />
                   </Trailer>
                 )}
-                <Info>Cast</Info>
-                {movieCreditsData && (
-                  <Cast>
-                    {simplifiedCast?.map((castMember, index) => (
-                      <CastMemberCard key={index}>
-                        {castMember.profile_path === null ? (
-                          <DefaultAvatar>
-                            이미지
-                            <br /> 없음
-                          </DefaultAvatar>
-                        ) : (
-                          <ProfileAvatar
-                            $imageSrc={makeImagePath(castMember.profile_path)}
-                          />
-                        )}
-                        <InfoBox className='hover-InfoBox'>
-                          <p>{castMember.name}</p>
-                          <p>{castMember.character}</p>
-                        </InfoBox>
-                      </CastMemberCard>
-                    ))}
-                  </Cast>
+                {contentCreditsData && (
+                  <>
+                    {simplifiedCast?.length === 0 ? '' : <Info>Cast</Info>}
+                    <Cast>
+                      {simplifiedCast?.map((castMember, index) => (
+                        <CastMemberCard key={index}>
+                          {castMember.profile_path === null ? (
+                            <DefaultAvatar>
+                              이미지
+                              <br /> 없음
+                            </DefaultAvatar>
+                          ) : (
+                            <ProfileAvatar
+                              $imageSrc={makeImagePath(castMember.profile_path)}
+                            />
+                          )}
+                          <InfoBox className='hover-InfoBox'>
+                            <p>{castMember.name}</p>
+                            <p>{castMember.character}</p>
+                          </InfoBox>
+                        </CastMemberCard>
+                      ))}
+                    </Cast>
+                  </>
                 )}
               </Aside>
             </Section>

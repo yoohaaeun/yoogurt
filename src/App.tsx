@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Root from './pages/Root';
 import Search from './pages/Search';
-import Tv from './pages/Tv';
+import TvSeries from './pages/TvSeries';
 
 const router = createBrowserRouter([
   {
@@ -14,8 +14,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: '/movies/:contentId', element: <Home /> },
-      { path: '/tv', element: <Tv /> },
-      { path: '/tv/:contentId', element: <Tv /> },
+      { path: '/tvSeries', element: <TvSeries /> },
+      { path: '/tvSeries/:contentId', element: <TvSeries /> },
       { path: '/search', element: <Search /> },
       { path: '/search/:contentId', element: <Search /> },
     ],

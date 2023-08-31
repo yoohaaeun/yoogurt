@@ -99,7 +99,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch('/');
-  const tvMatch = useMatch('/tv');
+  const tvMatch = useMatch('/tvSeries');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -140,7 +140,7 @@ export default function Navbar() {
             <Link to='/'>홈 {homeMatch && <Circle layoutId='circle' />}</Link>
           </Item>
           <Item>
-            <Link to='/tv'>
+            <Link to='/tvSeries'>
               TV프로그램 {tvMatch && <Circle layoutId='circle' />}
             </Link>
           </Item>

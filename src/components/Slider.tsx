@@ -61,6 +61,7 @@ const Info = styled(motion.div)`
   h4 {
     text-align: center;
     font-size: 18px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.57);
   }
 `;
 
@@ -68,6 +69,7 @@ interface ISlider {
   data: IContentResult;
   title: string;
   category: string;
+  type: string;
 }
 
 const rowVariants = {
@@ -110,7 +112,7 @@ const infoVariants = {
 
 const offset = 5;
 
-export default function Slider({ data, title, category }: ISlider) {
+export default function Slider({ data, title, category, type }: ISlider) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -138,8 +140,12 @@ export default function Slider({ data, title, category }: ISlider) {
     }
   };
 
-  const onBoxClicked = (contentId: number) => {
-    navigate(`/movies/${contentId}`);
+  const onClicked = (contentId: number, type: string) => {
+    if (type === 'movie') {
+      navigate(`/movies/${contentId}`);
+    } else if (type === 'tv') {
+      navigate(`/tvSeries/${contentId}`);
+    }
   };
 
   return (
@@ -162,19 +168,19 @@ export default function Slider({ data, title, category }: ISlider) {
           >
             {data?.results
               .slice(offset * index, offset * index + offset)
-              .map((contents) => (
+              .map((content) => (
                 <Box
-                  layoutId={category + contents.id + ''}
-                  onClick={() => onBoxClicked(contents.id)}
-                  key={contents.id}
+                  layoutId={category + content.id + ''}
+                  onClick={() => onClicked(content.id, type)}
+                  key={content.id}
                   variants={boxVariants}
                   initial='normal'
                   whileHover='hover'
                   transition={{ type: 'tween' }}
-                  $bgPhoto={makeImagePath(contents.backdrop_path)}
+                  $bgPhoto={makeImagePath(content.backdrop_path)}
                 >
                   <Info variants={infoVariants}>
-                    <h4>{contents.title}</h4>
+                    <h4>{content.title ? content.title : content.name}</h4>
                   </Info>
                 </Box>
               ))}
