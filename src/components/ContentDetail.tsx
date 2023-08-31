@@ -68,7 +68,7 @@ const Poster = styled.img`
 const Status = styled.p`
   display: inline-block;
   padding: 2px 5px;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
   border-radius: 3px;
   background-color: #ff5050;
   font-size: 11px;
@@ -85,6 +85,7 @@ const Info = styled.div`
   gap: 5px;
   margin-bottom: 10px;
   font-size: 13px;
+  white-space: nowrap;
 `;
 
 const Rating = styled(Info)`
@@ -256,7 +257,9 @@ export default function ContentDetail({ type }: IContentDetail) {
             exit={{ opacity: 0 }}
           />
           <Container>
-            <Cover $bgPhoto={makeImagePath(data.backdrop_path)}>
+            <Cover
+              $bgPhoto={makeImagePath(data.backdrop_path || data.poster_path)}
+            >
               <Title>{data.title ? data.title : data.name}</Title>
             </Cover>
 
@@ -278,7 +281,9 @@ export default function ContentDetail({ type }: IContentDetail) {
                   <p>
                     {data.release_date
                       ? data.release_date
-                      : data.first_air_date}
+                      : data.first_air_date
+                      ? data.first_air_date
+                      : '미정'}
                   </p>
                   <p>•</p>
                   <p>{data.genres[0].name}</p>

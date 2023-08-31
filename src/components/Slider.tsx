@@ -177,7 +177,9 @@ export default function Slider({ data, title, category, type }: ISlider) {
                   initial='normal'
                   whileHover='hover'
                   transition={{ type: 'tween' }}
-                  $bgPhoto={makeImagePath(content.backdrop_path)}
+                  $bgPhoto={makeImagePath(
+                    content.backdrop_path || content.poster_path
+                  )}
                 >
                   <Info variants={infoVariants}>
                     <h4>{content.title ? content.title : content.name}</h4>
