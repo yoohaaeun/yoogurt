@@ -64,6 +64,54 @@ export function useTVSeriesByCategory(category: string) {
   );
 }
 
+// GENRES
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+interface MovieGenres {
+  genres: Genre[];
+}
+
+export async function getGenreList(type: string) {
+  const response = await axios.get(
+    `${BASE_PATH}/genre/${type}/list?api_key=${API_KEY}&language=${LANGUAGE}`
+  );
+  return response.data;
+}
+
+export function useGenreList(type: string) {
+  return useQuery<MovieGenres>(['genreList', type], () => getGenreList(type), {
+    staleTime: 1000 * 60 * 60 * 24,
+    enabled: !!type,
+  });
+}
+
+// DISCOVER
+
+export async function getContentByGenre(
+  type: string,
+  genreId: number | undefined
+) {
+  const response = await axios.get(
+    `${BASE_PATH}/discover/${type}?api_key=${API_KEY}&language=${LANGUAGE}&with_genres=${genreId}`
+  );
+  return response.data;
+}
+
+export function useContentByGenre(type: string, genreId: number | undefined) {
+  return useQuery<IContentResult>(
+    ['contentByGenre', genreId],
+    () => getContentByGenre(type, genreId),
+    {
+      staleTime: 1000 * 60 * 5,
+      enabled: !!genreId,
+    }
+  );
+}
+
 // Details
 
 interface IGenres {

@@ -1,4 +1,9 @@
-import { useTVSeriesByCategory } from '../api';
+import {
+  useTVSeriesByCategory,
+  useGenreList,
+  useContentByGenre,
+  Genre,
+} from '../api';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import Slider from '../components/Slider';
@@ -11,6 +16,7 @@ import {
 } from 'framer-motion';
 import ContentDetail from '../components/ContentDetail';
 import { useParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const Wrapper = styled.div<{ $bgPhoto: string }>`
   width: 100%;
@@ -33,7 +39,27 @@ const Container = styled(motion.div)`
 export default function TvSeries() {
   const topRatedTvQuery = useTVSeriesByCategory('top_rated');
   const onTheAirTvQuery = useTVSeriesByCategory('on_the_air');
-  const popularTvQuery = useTVSeriesByCategory('popular');
+  const TvSeriesGenres = useGenreList(TYPE);
+  const genreList = TvSeriesGenres.data?.genres;
+
+  const animationGenreId = useMemo(() => {
+    return genreList?.find((genre) => genre.name === '애니메이션')?.id;
+  }, [genreList]);
+
+  const animationContent = useContentByGenre(TYPE, animationGenreId);
+
+  const documentaryGenreId = useMemo(() => {
+    return genreList?.find((genre) => genre.name === '다큐멘터리')?.id;
+  }, [genreList]);
+
+  const documentaryContent = useContentByGenre(TYPE, documentaryGenreId);
+
+  const comedyGenreId = useMemo(() => {
+    return genreList?.find((genre) => genre.name === '코미디')?.id;
+  }, [genreList]);
+
+  const comedyContent = useContentByGenre(TYPE, comedyGenreId);
+
   const { contentId } = useParams();
   const { scrollY } = useScroll();
   const bgAnimation = useAnimation();
@@ -65,6 +91,14 @@ export default function TvSeries() {
             {topRatedTvQuery.data && (
               <Banner data={topRatedTvQuery.data.results[0]} type={TYPE} />
             )}
+            {onTheAirTvQuery.data && (
+              <Slider
+                data={onTheAirTvQuery.data}
+                category={'on_the_air'}
+                title={'현재 방영 중인 TV 프로그램'}
+                type={TYPE}
+              />
+            )}
             {topRatedTvQuery.data && (
               <Slider
                 data={topRatedTvQuery.data}
@@ -73,19 +107,27 @@ export default function TvSeries() {
                 type={TYPE}
               />
             )}
-            {popularTvQuery.data && (
+            {animationContent.data && (
               <Slider
-                data={popularTvQuery.data}
-                category={'popular'}
-                title={'인기 콘텐츠'}
+                data={animationContent.data}
+                category={'animation'}
+                title={'애니메이션'}
                 type={TYPE}
               />
             )}
-            {onTheAirTvQuery.data && (
+            {documentaryContent.data && (
               <Slider
-                data={onTheAirTvQuery.data}
-                category={'on_the_air'}
-                title={'현재 방영 중인 TV 프로그램'}
+                data={documentaryContent.data}
+                category={'documentary'}
+                title={'다큐멘터리'}
+                type={TYPE}
+              />
+            )}
+            {comedyContent.data && (
+              <Slider
+                data={comedyContent.data}
+                category={'comedy'}
+                title={'코미디'}
                 type={TYPE}
               />
             )}
