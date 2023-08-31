@@ -142,7 +142,7 @@ export default function Slider({ data, title, category, type }: ISlider) {
 
   const onClicked = (contentId: number, type: string) => {
     if (type === 'movie') {
-      navigate(`/movies/${contentId}`);
+      navigate(`/home/${contentId}`);
     } else if (type === 'tv') {
       navigate(`/tvSeries/${contentId}`);
     }

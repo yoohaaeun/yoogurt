@@ -58,7 +58,7 @@ export default function Banner({ data, type }: IBanner) {
   const navigate = useNavigate();
   const onClicked = () => {
     if (type === 'movie') {
-      navigate(`/movies/${data.id}`);
+      navigate(`/home/${data.id}`);
     } else if (type === 'tv') {
       navigate(`/tvSeries/${data.id}`);
     }

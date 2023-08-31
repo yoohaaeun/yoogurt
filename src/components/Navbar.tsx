@@ -100,6 +100,7 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch('/');
   const tvMatch = useMatch('/tvSeries');
+  const movieMatch = useMatch('/movie');
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -144,8 +145,11 @@ export default function Navbar() {
               TV프로그램 {tvMatch && <Circle layoutId='circle' />}
             </Link>
           </Item>
-          <Item>영화</Item>
-          <Item>New! 요즘 대세 콘텐츠</Item>
+          <Item>
+            <Link to='/movie'>
+              영화 {movieMatch && <Circle layoutId='circle' />}
+            </Link>
+          </Item>
         </Items>
       </Col>
       <Col>
