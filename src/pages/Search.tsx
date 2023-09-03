@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSearchResults } from '../api';
@@ -7,7 +6,7 @@ import { makeImagePath } from '../utils';
 
 const Wrapper = styled.div`
   width: 100vw;
-  padding: 7.5rem 3.75rem;
+  padding: 7.5rem 7rem;
   background-color: ${(props) => props.theme.black.darker};
   min-height: 100vh;
 `;

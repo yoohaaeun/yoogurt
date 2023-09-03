@@ -13,11 +13,11 @@ const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   top: 0;
   font-size: 14px;
-  padding: 20px 60px;
+  padding: 1.25rem 7rem;
   color: white;
   z-index: 9999;
 `;

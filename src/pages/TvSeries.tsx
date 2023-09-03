@@ -33,7 +33,7 @@ const Container = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: relative;
-  padding: 0 150px 60px 150px;
+  padding: 4rem 7rem;
 `;
 
 export default function TvSeries() {

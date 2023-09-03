@@ -15,12 +15,12 @@ import {
 const Wrapper = styled.div<{ $bgPhoto: string }>`
   width: 100%;
   height: 100%;
+  max-width: 100vw;
   min-height: 100vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)),
     url(${(props) => props.$bgPhoto});
   background-size: cover;
   background-position: center center;
-  overflow-x: hidden;
   background-attachment: fixed;
 `;
 
@@ -28,11 +28,12 @@ const Container = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: relative;
-  padding: 4rem 3.75rem;
+  padding: 4rem 7rem;
 `;
 
 const List = styled.ul`
-  width: 100%;
+  width: 90%;
+
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
@@ -44,25 +45,26 @@ const List = styled.ul`
   z-index: 99;
 `;
 
-const ListItem = styled.li<{ active: boolean }>`
+const ListItem = styled.li<{ $active: boolean }>`
   width: fit-content;
   height: auto;
   cursor: pointer;
   border: 1px solid white;
   border-radius: 8px;
   padding: 5px 10px;
-  background-color: rgba(109, 109, 110, 0.7);
+  background-color: rgba(109, 109, 110, 0.8);
   color: ${(props) => props.theme.white.darker};
 
   &:hover {
     background-color: rgba(109, 109, 110, 0.5);
     color: ${(props) => props.theme.white.lighter};
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.57);
   }
 
   ${(props) =>
-    props.active &&
+    props.$active &&
     css`
-      background-color: rgba(255, 0, 0, 0.7);
+      background-color: rgba(229, 16, 19, 0.7);
       color: ${(props) => props.theme.white.lighter};
     `}
 `;
@@ -188,7 +190,11 @@ export default function Movie() {
   });
 
   return (
-    <Wrapper $bgPhoto={makeImagePath(movies?.results[0].backdrop_path || '')}>
+    <Wrapper
+      $bgPhoto={makeImagePath(
+        movies?.results[0].backdrop_path || movies?.results[0].poster_path || ''
+      )}
+    >
       <Container
         animate={bgAnimation}
         initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
@@ -198,7 +204,7 @@ export default function Movie() {
             <ListItem
               key={genre.id}
               onClick={() => handleGenreClick(genre.id, genre.name)}
-              active={genreTitle === genre.name}
+              $active={genreTitle === genre.name}
             >
               {genre.name}
             </ListItem>
