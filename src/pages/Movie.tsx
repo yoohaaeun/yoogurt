@@ -15,7 +15,6 @@ import {
 const Wrapper = styled.div<{ $bgPhoto: string }>`
   width: 100%;
   height: 100%;
-  max-width: 100vw;
   min-height: 100vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)),
     url(${(props) => props.$bgPhoto});
@@ -32,17 +31,12 @@ const Container = styled(motion.div)`
 `;
 
 const List = styled.ul`
-  width: 90%;
-
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
-  position: fixed;
-  top: 4rem;
   padding: 1rem 0;
-  margin-bottom: 50px;
-  list-style: none;
   z-index: 99;
+  list-style: none;
 `;
 
 const ListItem = styled.li<{ $active: boolean }>`
@@ -50,8 +44,8 @@ const ListItem = styled.li<{ $active: boolean }>`
   height: auto;
   cursor: pointer;
   border: 1px solid white;
-  border-radius: 8px;
-  padding: 5px 10px;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.7rem;
   background-color: rgba(109, 109, 110, 0.8);
   color: ${(props) => props.theme.white.darker};
 
@@ -77,7 +71,7 @@ const Banner = styled.section`
   height: 60vh;
 
   h2 {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     font-size: 3.5rem;
   }
 
@@ -85,7 +79,7 @@ const Banner = styled.section`
     width: 50%;
     font-size: 1.25rem;
     line-height: 1.5;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
   }
 
   div {
@@ -112,19 +106,19 @@ const Banner = styled.section`
 
 const InfoIcon = styled(LuInfo)`
   font-size: 1.5rem;
-  margin-right: 6px;
+  margin-right: 0.4rem;
 `;
 
 const Section = styled.section`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 3rem;
 `;
 
 const Heading = styled.h2`
   font-size: 1.6rem;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
 `;
 
 const Item = styled.div`
