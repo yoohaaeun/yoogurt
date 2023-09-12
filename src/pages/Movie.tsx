@@ -28,6 +28,14 @@ const Container = styled(motion.div)`
   height: 100%;
   position: relative;
   padding: 4rem 7rem;
+
+  @media (max-width: 765px) {
+    padding: 4rem 4rem;
+  }
+
+  @media (max-width: 574px) {
+    padding: 4rem 1.5rem;
+  }
 `;
 
 const List = styled.ul`
@@ -61,6 +69,14 @@ const ListItem = styled.li<{ $active: boolean }>`
       background-color: rgba(229, 16, 19, 0.7);
       color: ${(props) => props.theme.white.lighter};
     `}
+
+  @media (max-width: 765px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 574px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const Banner = styled.section`
@@ -87,19 +103,46 @@ const Banner = styled.section`
     justify-content: center;
     align-items: center;
     background-color: rgba(109, 109, 110, 0.7);
-    width: 130px;
-    padding: 10px 10px;
-    border-radius: 5px;
+    width: 8rem;
+    padding: 0.6rem 0.6rem;
+    border-radius: 0.3rem;
     font-size: 1rem;
     cursor: pointer;
 
-    span {
-      position: relative;
-      top: 1px;
-    }
-
     &:hover {
       background-color: rgba(109, 109, 110, 0.5);
+    }
+  }
+
+  @media (max-width: 765px) {
+    h2 {
+      font-size: 3rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      width: 80%;
+    }
+  }
+
+  @media (max-width: 574px) {
+    h2 {
+      font-size: 2.5rem;
+    }
+
+    p {
+      width: 80%;
+      font-size: 1rem;
+    }
+
+    div {
+      width: 6.9rem;
+      font-size: 0.9rem;
+
+      span {
+        position: relative;
+        top: -1px;
+      }
     }
   }
 `;
@@ -107,6 +150,9 @@ const Banner = styled.section`
 const InfoIcon = styled(LuInfo)`
   font-size: 1.5rem;
   margin-right: 0.4rem;
+
+  @media (max-width: 574px) {
+  }
 `;
 
 const Section = styled.section`
@@ -147,6 +193,12 @@ const Item = styled.div`
 
     h5 {
       color: white;
+    }
+  }
+
+  @media (max-width: 574px) {
+    &:hover {
+      transform: scale(1.05);
     }
   }
 `;
