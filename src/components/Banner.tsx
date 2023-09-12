@@ -8,19 +8,45 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 85vh;
+  height: 75vh;
+
+  @media (max-width: 765px) {
+    height: 60vh;
+  }
 `;
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   font-size: 3.5rem;
+
+  @media (max-width: 765px) {
+    font-size: 3rem;
+  }
+
+  @media (max-width: 574px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const Overview = styled.p`
   width: 50%;
   font-size: 1.25rem;
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 1400px) {
+    width: 70%;
+  }
+
+  @media (max-width: 765px) {
+    width: 80%;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 574px) {
+    font-size: 1rem;
+    width: 90%;
+  }
 `;
 
 const Info = styled.div`
@@ -28,25 +54,25 @@ const Info = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(109, 109, 110, 0.7);
-  width: 130px;
-  padding: 10px 10px;
-  border-radius: 5px;
+  width: 8rem;
+  padding: 0.6rem 0.6rem;
+  border-radius: 0.3rem;
   font-size: 1rem;
   cursor: pointer;
 
-  span {
-    position: relative;
-    top: 1px;
-  }
-
   &:hover {
     background-color: rgba(109, 109, 110, 0.5);
+  }
+
+  @media (max-width: 574px) {
+    width: 6.9rem;
+    font-size: 0.9rem;
   }
 `;
 
 const InfoIcon = styled(LuInfo)`
   font-size: 1.5rem;
-  margin-right: 6px;
+  margin-right: 0.4rem;
 `;
 
 interface IBanner {
