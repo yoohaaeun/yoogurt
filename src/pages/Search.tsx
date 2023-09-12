@@ -9,6 +9,14 @@ const Wrapper = styled.div`
   padding: 7.5rem 7rem;
   background-color: ${(props) => props.theme.black.darker};
   min-height: 100vh;
+
+  @media (max-width: 765px) {
+    padding: 7.5rem 4rem;
+  }
+
+  @media (max-width: 574px) {
+    padding: 7.5rem 1.5rem;
+  }
 `;
 
 const Text = styled.h2`
@@ -18,6 +26,10 @@ const Text = styled.h2`
   span {
     margin-left: 0.6rem;
     color: lightgray;
+  }
+
+  @media (max-width: 765px) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -70,6 +82,12 @@ const Item = styled.div`
 
     h5 {
       color: white;
+    }
+  }
+
+  @media (max-width: 574px) {
+    &:hover {
+      transform: scale(1.05);
     }
   }
 `;
