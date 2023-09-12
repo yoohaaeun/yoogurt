@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { makeImagePath } from '../utils';
@@ -26,6 +26,21 @@ const Container = styled(motion.div)`
   border-radius: 10px;
   background-color: ${(props) => props.theme.black.veryDark};
   z-index: 100;
+
+  @media (max-width: 765px) {
+    width: 600px;
+    height: 580px;
+  }
+
+  @media (max-width: 676px) {
+    width: 500px;
+    height: 480px;
+  }
+
+  @media (max-width: 574px) {
+    width: 400px;
+    height: 380px;
+  }
 `;
 
 const Cover = styled.div<{ $bgPhoto: string }>`
@@ -45,23 +60,47 @@ const Title = styled.h3`
   font-size: 45px;
   position: absolute;
   bottom: 0;
+
+  @media (max-width: 765px) {
+    font-size: 35px;
+  }
+
+  @media (max-width: 676px) {
+    font-size: 30px;
+  }
+
+  @media (max-width: 574px) {
+    font-size: 25px;
+  }
 `;
 
 const Section = styled.section`
-  display: flex;
-  padding: 10px 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(147px, 1fr));
+  grid-gap: 10px;
+  padding: 10px 20px;
+  height: 50%;
   color: ${(props) => props.theme.white.lighter};
+  /* overflow-y: scroll; */
+
+  @media (max-width: 765px) {
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  }
+
+  @media (max-width: 676px) {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  }
 `;
 
 const Article = styled.article`
-  width: 300px;
-  height: 300px;
-  margin-left: 10px;
-  overflow-y: hidden;
+  width: 100%;
+  grid-column: span 2;
+  padding-right: 11px;
+  overflow-y: scroll;
 `;
 
 const Poster = styled.img`
-  width: 130px;
+  width: 100%;
   border-radius: 5px;
 `;
 
@@ -77,6 +116,10 @@ const Status = styled.p`
 const OriginalTitle = styled.p`
   font-size: 20px;
   margin-bottom: 10px;
+
+  @media (max-width: 574px) {
+    font-size: 18px;
+  }
 `;
 
 const Info = styled.div`
@@ -86,6 +129,10 @@ const Info = styled.div`
   margin-bottom: 10px;
   font-size: 13px;
   white-space: nowrap;
+
+  @media (max-width: 574px) {
+    font-size: 11px;
+  }
 `;
 
 const Rating = styled(Info)`
@@ -93,8 +140,6 @@ const Rating = styled(Info)`
   margin-bottom: 15px;
   gap: 8px;
 `;
-
-const VoteAverage = styled.p``;
 
 const Icon = styled.p`
   font-size: 10px;
@@ -107,22 +152,29 @@ const Tagline = styled.p`
   margin-bottom: 5px;
   font-weight: bold;
   margin-bottom: 15px;
+
+  @media (max-width: 574px) {
+    font-size: 15px;
+  }
 `;
 
 const Overview = styled.p`
   width: 100%;
-  height: 150px;
-  padding-right: 17px;
-  overflow-y: auto;
   color: #b8b8b8;
   font-size: 13px;
   line-height: 1.3;
+
+  @media (max-width: 574px) {
+    font-size: 11px;
+  }
 `;
 
 const Aside = styled.aside`
-  width: 190px;
-  margin-left: 10px;
-  padding: 10px 10px;
+  width: 100%;
+
+  @media (max-width: 765px) {
+    display: none;
+  }
 `;
 
 const Trailer = styled.div`
@@ -136,9 +188,8 @@ const Trailer = styled.div`
 
 const Cast = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 10px;
-  column-gap: 17px;
+  grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+  gap: 10px;
 `;
 
 const CastMemberCard = styled.div`
@@ -297,7 +348,7 @@ export default function ContentDetail({ type }: IContentDetail) {
                   </p>
                 </Info>
                 <Rating>
-                  <VoteAverage>{roundedRating}</VoteAverage>
+                  <p>{roundedRating}</p>
                   <Icon>
                     {roundedRating !== undefined
                       ? generateStars(parseInt(roundedRating))
