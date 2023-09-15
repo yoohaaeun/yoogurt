@@ -120,8 +120,8 @@ const Banner = styled.section`
     }
 
     p {
-      font-size: 1.1rem;
       width: 80%;
+      font-size: 1.1rem;
     }
   }
 
@@ -131,7 +131,7 @@ const Banner = styled.section`
     }
 
     p {
-      width: 80%;
+      width: 90%;
       font-size: 1rem;
     }
 
@@ -150,9 +150,6 @@ const Banner = styled.section`
 const InfoIcon = styled(LuInfo)`
   font-size: 1.5rem;
   margin-right: 0.4rem;
-
-  @media (max-width: 574px) {
-  }
 `;
 
 const Section = styled.section`

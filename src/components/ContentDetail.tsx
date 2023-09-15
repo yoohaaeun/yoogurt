@@ -81,7 +81,6 @@ const Section = styled.section`
   padding: 10px 20px;
   height: 50%;
   color: ${(props) => props.theme.white.lighter};
-  /* overflow-y: scroll; */
 
   @media (max-width: 765px) {
     grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));

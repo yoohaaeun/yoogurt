@@ -28,6 +28,14 @@ const Container = styled(motion.div)`
   height: 100%;
   position: relative;
   padding: 4rem 7rem;
+
+  @media (max-width: 765px) {
+    padding: 4rem 4rem;
+  }
+
+  @media (max-width: 574px) {
+    padding: 4rem 1.5rem;
+  }
 `;
 
 export default function Home() {

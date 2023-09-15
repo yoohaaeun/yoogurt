@@ -8,37 +8,45 @@ import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 280px;
-  margin-bottom: 130px;
+  margin-bottom: 8rem;
+
+  &:last-child {
+    margin-bottom: 2rem;
+  }
 `;
 
 const Title = styled.div`
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `;
 
 const Container = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 16rem;
   position: relative;
+
+  @media (max-width: 765px) {
+    height: 12rem;
+  }
 `;
 
 const Row = styled(motion.div)`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
   position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const Box = styled(motion.div)<{ $bgPhoto: string }>`
+  width: 100%;
+  height: 16rem;
+  border-radius: 1rem;
   background-image: url(${(props) => props.$bgPhoto});
   background-size: cover;
   background-position: center center;
-  height: 100px;
-  width: 19%;
-  height: 250px;
-  border-radius: 15px;
   cursor: pointer;
 
   &:first-child {
@@ -48,19 +56,22 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   &:last-child {
     transform-origin: center right;
   }
+
+  @media (max-width: 765px) {
+    height: 12rem;
+  }
 `;
 
 const Info = styled(motion.div)`
   width: 100%;
   position: absolute;
   bottom: 0;
-  padding: 10px;
-  border-radius: 0 0 5px 5px;
+  padding: 0.6rem;
   opacity: 0;
 
   h4 {
     text-align: center;
-    font-size: 18px;
+    font-size: 1.1rem;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.57);
   }
 `;

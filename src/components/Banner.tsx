@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 75vh;
+  margin-bottom: 1.25rem;
 
   @media (max-width: 765px) {
     height: 60vh;

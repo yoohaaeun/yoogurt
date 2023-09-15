@@ -7,36 +7,47 @@ const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   z-index: 1;
-  position: relative;
-  top: 125px;
 `;
 
 const NavigationButton = styled.button`
   position: absolute;
-  width: 45px;
-  height: 45px;
+  top: calc(50% - 0.9rem);
+  width: 1.8rem;
+  height: 1.8rem;
   background-color: #ffffff;
-  opacity: 0.5;
+  opacity: 0.6;
   border: none;
-  border-radius: 50%;
+  border-radius: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 1.8rem;
   cursor: pointer;
 
   &:hover {
     opacity: 1;
+    scale: 1.1;
     transition: opacity 0.3s ease 0s;
+    transition: scale 0.3s ease 0s;
   }
-`;
 
-const PrevButton = styled(NavigationButton)`
-  left: -70px;
-`;
+  &:first-child {
+    left: -2.5rem;
+  }
 
-const NextButton = styled(NavigationButton)`
-  right: -70px;
+  &:last-child {
+    right: -2.5rem;
+  }
+
+  @media (max-width: 574px) {
+    &:first-child {
+      left: 0.6rem;
+    }
+
+    &:last-child {
+      right: 0.6rem;
+    }
+  }
 `;
 
 interface ISlideBtn {
@@ -47,12 +58,12 @@ interface ISlideBtn {
 export default function SlideBtn({ prevBtn, nextBtn }: ISlideBtn) {
   return (
     <Buttons>
-      <PrevButton onClick={prevBtn}>
+      <NavigationButton onClick={prevBtn}>
         <IoIosArrowBack />
-      </PrevButton>
-      <NextButton onClick={nextBtn}>
+      </NavigationButton>
+      <NavigationButton onClick={nextBtn}>
         <IoIosArrowForward />
-      </NextButton>
+      </NavigationButton>
     </Buttons>
   );
 }
