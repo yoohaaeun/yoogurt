@@ -1,5 +1,4 @@
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-
 import styled from 'styled-components';
 
 const Buttons = styled.div`
@@ -14,7 +13,7 @@ const NavigationButton = styled.button`
   top: calc(50% - 0.9rem);
   width: 1.8rem;
   height: 1.8rem;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.white.lighter};
   opacity: 0.6;
   border: none;
   border-radius: 1.8rem;

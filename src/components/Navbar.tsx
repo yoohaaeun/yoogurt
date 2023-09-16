@@ -19,7 +19,7 @@ const Nav = styled(motion.nav)`
   top: 0;
   font-size: 0.9rem;
   padding: 1.25rem 7rem;
-  color: white;
+  color: ${(props) => props.theme.white.lighter};
   z-index: 9999;
 
   @media (max-width: 765px) {
@@ -28,7 +28,7 @@ const Nav = styled(motion.nav)`
 
   @media (max-width: 574px) {
     padding: 1.25rem 1.5rem;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -38,17 +38,17 @@ const Col = styled.div`
   align-items: center;
 `;
 
-const Logo = styled.h1`
-  margin-right: 3rem;
-  width: 5.9rem;
-  font-size: 1.9rem;
-  font-weight: 900;
-  color: ${(props) => props.theme.red};
+const Logo = styled.img`
+  width: 6rem;
+  margin-right: 2rem;
+  position: relative;
+  top: 0.35rem;
 
   @media (max-width: 676px) {
     margin-right: 0;
-    width: 5.6rem;
-    font-size: 1.25rem;
+    width: 5rem;
+    margin-right: 1.4rem;
+    top: 0.25rem;
   }
 `;
 
@@ -80,7 +80,7 @@ const Circle = styled(motion.span)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.red};
+  background-color: ${(props) => props.theme.main};
 
   @media (max-width: 574px) {
     width: 0.2rem;
@@ -159,9 +159,9 @@ export default function Navbar() {
   return (
     <Nav animate={navAnimation} initial={{ backgroundColor: 'rgba(0,0,0,0)' }}>
       <Col>
-        <Logo>
-          <Link to='/'>Yooflix</Link>
-        </Logo>
+        <Link to='/'>
+          <Logo src='images/logo.png' alt='' />
+        </Link>
         <Items>
           <Item>
             <Link to='/'>홈 {homeMatch && <Circle layoutId='circle' />}</Link>

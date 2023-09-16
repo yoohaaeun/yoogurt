@@ -108,7 +108,7 @@ const Status = styled.p`
   padding: 2px 5px;
   margin-bottom: 7px;
   border-radius: 3px;
-  background-color: #ff5050;
+  background-color: ${(props) => props.theme.red};
   font-size: 11px;
 `;
 
@@ -135,7 +135,7 @@ const Info = styled.div`
 `;
 
 const Rating = styled(Info)`
-  color: #b8b8b8;
+  color: ${(props) => props.theme.gray.lighter};
   margin-bottom: 15px;
   gap: 8px;
 `;
@@ -159,7 +159,7 @@ const Tagline = styled.p`
 
 const Overview = styled.p`
   width: 100%;
-  color: #b8b8b8;
+  color: ${(props) => props.theme.gray.lighter};
   font-size: 13px;
   line-height: 1.3;
 
@@ -210,7 +210,7 @@ const DefaultAvatar = styled.div`
   height: 45px;
   border: 1px solid #ffffff;
   border-radius: 50%;
-  background-color: #575757;
+  background-color: ${(props) => props.theme.gray.darker};
   font-size: 7px;
 `;
 
@@ -234,11 +234,11 @@ const InfoBox = styled.div`
   font-size: 13px;
   padding: 3px 6px;
   z-index: 100;
-  background-color: #575757;
+  background-color: ${(props) => props.theme.gray.darker};
   line-height: 1.3;
 
   p:last-child {
-    color: #adacac;
+    color: ${(props) => props.theme.gray.lighter};
     font-size: 11px;
   }
 `;

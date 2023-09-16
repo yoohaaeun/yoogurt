@@ -1,19 +1,22 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Nav = styled.nav`
   width: 100vw;
   padding: 20px 60px;
-  background-color: balck;
 `;
 
-const Logo = styled.a`
-  margin-right: 50px;
-  width: 95px;
-  height: 25px;
-  font-size: 25px;
-  font-weight: 900;
-  color: ${(props) => props.theme.red};
-  cursor: pointer;
+const Logo = styled.img`
+  width: 5.9rem;
+  margin-right: 2rem;
+  position: relative;
+  top: 5px;
+
+  @media (max-width: 676px) {
+    margin-right: 0;
+    width: 5.5rem;
+    margin-right: 1rem;
+  }
 `;
 
 const Container = styled.div`
@@ -34,6 +37,10 @@ const Title = styled.h2`
   font-size: 80px;
   margin-bottom: 35px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.57);
+
+  @media (max-width: 765px) {
+    font-size: 50px;
+  }
 `;
 
 const Message = styled.p`
@@ -41,6 +48,10 @@ const Message = styled.p`
   margin-bottom: 30px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.57);
   line-height: 1.4;
+
+  @media (max-width: 765px) {
+    font-size: 23px;
+  }
 `;
 
 const Button = styled.button`
@@ -61,7 +72,9 @@ export default function NotFound() {
   return (
     <>
       <Nav>
-        <Logo href='/'>Yooflix</Logo>
+        <Link to='/'>
+          <Logo src='images/logo.png' alt='' />
+        </Link>
       </Nav>
       <Container>
         <Title>길을 잃으셨나요?</Title>
@@ -70,7 +83,7 @@ export default function NotFound() {
           콘텐츠를 만나보세요.
         </Message>
         <Button>
-          <a href='/'>Yooflix 홈</a>
+          <a href='/'>Yoogurt 홈</a>
         </Button>
       </Container>
     </>

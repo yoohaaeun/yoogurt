@@ -25,7 +25,7 @@ const Text = styled.h2`
 
   span {
     margin-left: 0.6rem;
-    color: lightgray;
+    color: ${(props) => props.theme.gray.lighter};
   }
 
   @media (max-width: 765px) {
@@ -59,7 +59,7 @@ const Item = styled.div`
     aspect-ratio: 16 / 9;
     border-radius: 0.9rem;
     margin-bottom: 0.9rem;
-    background-color: black;
+    background-color: ${(props) => props.theme.black.black};
     font-size: 0.8rem;
   }
 
@@ -73,7 +73,7 @@ const Item = styled.div`
   h5 {
     line-height: 1.4;
     text-align: center;
-    color: lightgray;
+    color: ${(props) => props.theme.gray.lighter};
     transition: color 0.3s ease-in-out;
   }
 
@@ -81,7 +81,7 @@ const Item = styled.div`
     transform: scale(1.15);
 
     h5 {
-      color: white;
+      color: ${(props) => props.theme.white.lighter};
     }
   }
 

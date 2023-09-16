@@ -66,7 +66,7 @@ const ListItem = styled.li<{ $active: boolean }>`
   ${(props) =>
     props.$active &&
     css`
-      background-color: rgba(229, 16, 19, 0.7);
+      background-color: rgba(255, 232, 191, 0.8);
       color: ${(props) => props.theme.white.lighter};
     `}
 
@@ -181,7 +181,7 @@ const Item = styled.div`
   h5 {
     line-height: 1.4;
     text-align: center;
-    color: lightgray;
+    color: ${(props) => props.theme.gray.lighter};
     transition: color 0.3s ease-in-out;
   }
 
@@ -189,7 +189,7 @@ const Item = styled.div`
     transform: scale(1.15);
 
     h5 {
-      color: white;
+      color: ${(props) => props.theme.white.lighter};
     }
   }
 
