@@ -1,9 +1,4 @@
-import {
-  useTVSeriesByCategory,
-  useGenreList,
-  useContentByGenre,
-  Genre,
-} from '../api';
+import { useTVSeriesByCategory, useGenreList, useContentByGenre } from '../api';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import Slider from '../components/Slider';
