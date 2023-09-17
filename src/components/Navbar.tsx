@@ -128,6 +128,7 @@ export default function Navbar() {
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
+
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({ scaleX: 0 });
@@ -138,7 +139,7 @@ export default function Navbar() {
   };
 
   useMotionValueEvent(scrollY, 'change', (y) => {
-    if (y > 170) {
+    if (y > 30) {
       navAnimation.start({
         backgroundColor: 'rgba(0,0,0,1)',
       });
