@@ -106,7 +106,7 @@ export default function TvSeries() {
               <Slider
                 data={topRatedTvQuery.data}
                 category={'top_rated'}
-                title={'믿고 보는 유플릭스 추천작'}
+                title={'믿고 보는 유거트 추천작'}
                 type={TYPE}
               />
             )}
