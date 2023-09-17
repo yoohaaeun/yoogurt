@@ -367,7 +367,7 @@ export default function ContentDetail({ type }: IContentDetail) {
                       title='Movie Trailer'
                       width='100%'
                       height='640'
-                      src={`http://www.youtube.com/embed/${trailers[0].key}`}
+                      src={`https://www.youtube.com/embed/${trailers[0].key}`}
                       frameBorder='0'
                     />
                   </Trailer>
