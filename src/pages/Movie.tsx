@@ -114,7 +114,7 @@ const Banner = styled.section`
     }
   }
 
-  @media (max-width: 765px) {
+  @media (max-width: 900px) {
     h2 {
       font-size: 3rem;
     }
