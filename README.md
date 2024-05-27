@@ -1,46 +1,30 @@
-# Getting Started with Create React App
+# Yoogurt : 오늘은 어떤 영화를 떠먹어 볼까?
+[**Yoogurt OTT 플랫폼**](https://yoogurt.netlify.app/) <br>
+영화 및 TV 콘텐츠에 특화된 OTT 플랫폼으로, TMDb API를 활용하여 최신 영화 및 TV 프로그램과 관련된 다양한 정보를 제공합니다. 사용자들은 영화 카테고리에서 장르별로 원하는 콘텐츠를 찾을 수 있으며, 검색 기능을 활용하여 특정 콘텐츠를 쉽게 찾을 수 있습니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Yoogurt](https://github.com/yoohaaeun/yoogurt/assets/101792909/0f1d26be-0796-4937-8c42-892ab16940d7)
 
-## Available Scripts
+<br>
 
-In the project directory, you can run:
+## 주요기능
+- **외부 API (TMDb) 를 활용한 콘텐츠 정보 가져오기**
+    - 비동기적으로 TMDb API를 호출하여 영화 및 TV 프로그램과 같은 콘텐츠 정보를 획득합니다.
+    - React Query를 이용하여 데이터를 효율적으로 캐시하여 상태를 관리함으로써 사용자에게 빠른 로딩 속도와 부드러운 화면 전환을 제공합니다.
+- **Framer Motion 라이브러리를 이용한 슬라이더 구현**
+    - Framer Motion 라이브러리를 활용하여, 화면에 보이는 콘텐츠 아이템들이 좌우로 이동 되도록 설정하여 구현했습니다.
+    - 각 아이템은 Framer Motion에서 제공되는 호버 효과, 애니메이션 속성을 사용해서 단조롭지 않은 UI 를 만들었습니다.
+- **유틸리티 함수를 활용한 코드 재사용성 향상**
+    - 반복되는 로직을 처리하는 공통 유틸리티 함수를 구현하여 코드를 더 간결하게 표현하고 유지보수를 편하게 할 수 있도록 고려했습니다.
+- **스타일 컴포넌트를 활용한 스타일링**
+    - 재사용 가능하고 유지보수가 편리한 스타일 컴포넌트를 이용하여 UI를 효과적으로 디자인하였습니다.
+- **반응형 UI 구현**
+    - 미디어 쿼리와 Flexbox, Grid를 활용하여 다양한 디바이스에서 동작하는 반응형 UI를 구현하여, 사용자에게 일관된 경험을 제공했습니다.
 
-### `npm start`
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 기술 스택
+- TypeScript
+- React
+- React Query
+- Styled-Components
+- Netlify
